@@ -1,0 +1,72 @@
+PODS:
+  - Idioms (1.4.0)
+  - ShellInterface (0.3.0)
+  - SourcererArchiver (0.1.0):
+    - Idioms
+    - ShellInterface
+  - SourcererUnarchiver (0.1.0):
+    - SourceryRuntime
+  - Sourcery (0.16.2)
+  - SourceryRuntime (0.0.1)
+  - SwiftFeature (0.1.0):
+    - SwiftTypes
+    - SwiftTypesMappers
+  - SwiftTypes (0.1.0)
+  - SwiftTypesMappers (0.1.0):
+    - SourceryRuntime
+    - SwiftTypes
+
+DEPENDENCIES:
+  - SourcererArchiver (from `https://github.com/hectr/swift-sourcerer.git`)
+  - SourcererUnarchiver (from `https://github.com/hectr/swift-sourcerer.git`)
+  - Sourcery
+  - SourceryRuntime (from `https://github.com/hectr/swift-sourcerer.git`)
+  - SwiftFeature (from `.`)
+  - SwiftTypes (from `.`)
+  - SwiftTypesMappers (from `.`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Idioms
+    - ShellInterface
+    - Sourcery
+
+EXTERNAL SOURCES:
+  SourcererArchiver:
+    :git: https://github.com/hectr/swift-sourcerer.git
+  SourcererUnarchiver:
+    :git: https://github.com/hectr/swift-sourcerer.git
+  SourceryRuntime:
+    :git: https://github.com/hectr/swift-sourcerer.git
+  SwiftFeature:
+    :path: "."
+  SwiftTypes:
+    :path: "."
+  SwiftTypesMappers:
+    :path: "."
+
+CHECKOUT OPTIONS:
+  SourcererArchiver:
+    :commit: c25bf8971178ce0df1b27df4a33e823d7c3d2054
+    :git: https://github.com/hectr/swift-sourcerer.git
+  SourcererUnarchiver:
+    :commit: c25bf8971178ce0df1b27df4a33e823d7c3d2054
+    :git: https://github.com/hectr/swift-sourcerer.git
+  SourceryRuntime:
+    :commit: c25bf8971178ce0df1b27df4a33e823d7c3d2054
+    :git: https://github.com/hectr/swift-sourcerer.git
+
+SPEC CHECKSUMS:
+  Idioms: 4cc4b8b6366bf783dd1f52ae7f4d8a82732230c9
+  ShellInterface: 84aad41857229d6730bb868f2e2d2764bdf1a09a
+  SourcererArchiver: baa91f0b321ccddee255ea3668b7b2464ab644ac
+  SourcererUnarchiver: 2cba00e491cb055e26df0fb698fa6987562fa25c
+  Sourcery: 3f406d227efd179773b3c3599ebd1700d1a6013c
+  SourceryRuntime: ad8d38480ae6d106369beed550e5b620c0fb4d52
+  SwiftFeature: 118e8ec89022323b0e8fe849f02b06fba6520e9e
+  SwiftTypes: 8e60324422b9394a9b66680cf0fe52e3a522189d
+  SwiftTypesMappers: eee6bba2b9fefa34303e69cb7262f785542f80cd
+
+PODFILE CHECKSUM: 740bdd5d49b65580ad953256ef8daf45afcb5ec7
+
+COCOAPODS: 1.7.4
