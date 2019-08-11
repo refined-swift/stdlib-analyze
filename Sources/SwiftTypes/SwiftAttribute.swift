@@ -1,6 +1,6 @@
 import Swift
 
-public struct SwiftAttribute: SwiftConvertible, MaybeMutating, MaybeUnavailable, MaybeDeprecated, MaybeObsoleted, MaybeRenamed, MaybePublic, Codable, Equatable {
+public struct SwiftAttribute: Codable, Equatable {
     public let serialize: String
     public let isMutating: Bool
     public let isAccessLevel: Bool

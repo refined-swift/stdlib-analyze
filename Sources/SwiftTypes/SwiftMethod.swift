@@ -1,7 +1,7 @@
 import Swift
 
-public struct SwiftMethod: SwiftConvertible, MaybeMutating, MaybeStatic, MaybeUnavailable, MaybeDeprecated, MaybeObsoleted, MaybeRenamed, Accessible, MaybePublic, DefinedIn, Codable, Equatable {
-    public struct Parameter: SwiftConvertible, Codable, Equatable {
+public struct SwiftMethod: Codable, Equatable {
+    public struct Parameter: Codable, Equatable {
         public var serialize: String {
             var string = label
             string += ":"
@@ -51,6 +51,10 @@ public struct SwiftMethod: SwiftConvertible, MaybeMutating, MaybeStatic, MaybeUn
                                          isDefinedInProtocol: isDefinedInProtocol)
     }
 
+    public var isPublic: Bool {
+        return accessLevel == "public"
+    }
+    
     public var isMutating: Bool {
         return attributes.contains { $0.isMutating }
     }

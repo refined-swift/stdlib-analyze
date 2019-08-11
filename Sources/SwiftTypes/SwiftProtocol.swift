@@ -1,6 +1,6 @@
 import Swift
 
-public struct SwiftProtocol: SwiftType, Codable, Equatable {
+public struct SwiftProtocol: Codable, Equatable {
     public var serialize: String {
         fatalError() // FIXME: implement associated types first
     }
@@ -15,6 +15,10 @@ public struct SwiftProtocol: SwiftType, Codable, Equatable {
     public let isRenamed: Bool
     public let isObsoleted: Bool
     public let accessLevel: String
+    
+    public var isPublic: Bool {
+        return accessLevel == "public"
+    }
     
     public init(globalName: String,
                 inheritedProtocols: [String],

@@ -1,6 +1,6 @@
 import Swift
 
-public struct SwiftProperty: SwiftConvertible, MaybeMutating, MaybeStatic, MaybeUnavailable, MaybeDeprecated, MaybeObsoleted, MaybeRenamed, Accessible, MaybePublic, DefinedIn, Codable, Equatable {
+public struct SwiftProperty: Codable, Equatable {
     public var serialize: String {
         let isDefinedInProtocol = self.isDefinedInProtocol ?? false
         return SwiftProperty.serialization(available: available,
@@ -26,6 +26,10 @@ public struct SwiftProperty: SwiftConvertible, MaybeMutating, MaybeStatic, Maybe
     public let returnType: String
     public let isDefinedInProtocol: Bool?
 
+    public var isPublic: Bool {
+        return accessLevel == "public"
+    }
+    
     public var isUnavailable: Bool {
         return attributes.contains { $0.isUnavailable }
     }
