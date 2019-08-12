@@ -9,9 +9,9 @@ target 'analyze' do
   # sourcery
   pod 'Sourcery'
   # swift types
-  pod 'SwiftTypes', :path => '.'
-  pod 'SwiftTypesMappers', :path => '.'
-  pod 'SwiftFeature', :path => '.'
+  pod 'SwiftTypes', :path => '.', :testspecs => ['Tests']
+  pod 'SwiftTypesMappers', :path => '.', :testspecs => ['Tests']
+  pod 'SwiftFeature', :path => '.', :testspecs => ['Tests'] 
   # swiftlint
   pod 'SwiftLint'
 end

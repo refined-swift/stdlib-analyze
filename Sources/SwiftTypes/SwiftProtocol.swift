@@ -1,10 +1,6 @@
 import Swift
 
 public struct SwiftProtocol: Codable, Equatable {
-    public var serialize: String {
-        fatalError() // FIXME: implement associated types first
-    }
-
     public let globalName: String
     public let inheritedProtocols: [String]
     public let properties: [SwiftProperty]

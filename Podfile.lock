@@ -11,9 +11,16 @@ PODS:
   - SwiftFeature (0.1.0):
     - SwiftTypes
     - SwiftTypesMappers
+  - SwiftFeature/Tests (0.1.0):
+    - SwiftTypes
+    - SwiftTypesMappers
   - SwiftLint (0.34.0)
   - SwiftTypes (0.1.0)
+  - SwiftTypes/Tests (0.1.0)
   - SwiftTypesMappers (0.1.0):
+    - SourceryRuntime
+    - SwiftTypes
+  - SwiftTypesMappers/Tests (0.1.0):
     - SourceryRuntime
     - SwiftTypes
 
@@ -23,9 +30,12 @@ DEPENDENCIES:
   - Sourcery
   - SourceryRuntime (from `https://github.com/hectr/swift-sourcerer.git`)
   - SwiftFeature (from `.`)
+  - SwiftFeature/Tests (from `.`)
   - SwiftLint
   - SwiftTypes (from `.`)
+  - SwiftTypes/Tests (from `.`)
   - SwiftTypesMappers (from `.`)
+  - SwiftTypesMappers/Tests (from `.`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -66,11 +76,11 @@ SPEC CHECKSUMS:
   SourcererUnarchiver: 2cba00e491cb055e26df0fb698fa6987562fa25c
   Sourcery: 3f406d227efd179773b3c3599ebd1700d1a6013c
   SourceryRuntime: ad8d38480ae6d106369beed550e5b620c0fb4d52
-  SwiftFeature: 118e8ec89022323b0e8fe849f02b06fba6520e9e
+  SwiftFeature: 92d224ef07672ffd55cd168c55f863f3cdf7d94c
   SwiftLint: 79d48a17c6565dc286c37efb8322c7b450f95c67
-  SwiftTypes: 8e60324422b9394a9b66680cf0fe52e3a522189d
-  SwiftTypesMappers: eee6bba2b9fefa34303e69cb7262f785542f80cd
+  SwiftTypes: e5e585b6d998b1bad7aa85ed11dc27d1cf77b43d
+  SwiftTypesMappers: b5b161d92bd7b257116ddfaa12d65dda79e5efb3
 
-PODFILE CHECKSUM: e9d634d3961904b4b9407bfca452c6b25538fb53
+PODFILE CHECKSUM: 2448ed59659c753a1f7e4c3a52ac9f9612de79a6
 
 COCOAPODS: 1.7.4

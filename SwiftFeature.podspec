@@ -11,4 +11,7 @@ Pod::Spec.new do |s|
     s.source_files     = ['Sources/SwiftFeature/**/*']
     s.dependency 'SwiftTypes'
     s.dependency 'SwiftTypesMappers'
+    s.test_spec 'Tests' do |test_spec|
+      test_spec.source_files = 'Tests/SwiftFeatureTests/**/*'
+    end
 end
