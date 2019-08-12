@@ -4,6 +4,7 @@ import SwiftTypes
 import SwiftTypesMappers
 
 extension SwiftFeature {
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     static func parseMethods(in sourceryTypes: SourceryRuntime.Types,
                              minimumCardinality: Int,
                              includeUnavailable: Bool,
@@ -25,26 +26,30 @@ extension SwiftFeature {
                 (!$0.isDeprecated || includeDeprecated) &&
                 (!$0.isRenamed || includeRenamed) &&
                 (!$0.isObsoleted || includeObsoleted) }
-        
+
         var allMethods = [String: SwiftMethod]()
         var names = [String: String]()
 
         let crossReference = Dictionary(grouping: nonProtocolPublicMethods, by: { (method: SwiftMethod) -> String in
-            //let returnType = method.returnType == method.definedInType || method.returnType.hasPrefix("\(method.definedInType!) ") ? "Self" : method.returnType
-            //let parameters = method.parameters.map { return SwiftMethod.Parameter(label: $0.label,
-            //                                                                      type: $0.type == method.definedInType! ? "Self" : $0.type,
-            //                                                                      isInOut: $0.isInOut,
-            //                                                                      isEscaping: $0.isEscaping,
-            //                                                                      isOwned: $0.isOwned,
-            //                                                                      isSelf: $0.isSelf)}
+            //let returnType = method.returnType == method.definedInType || method.returnType.hasPrefix("\(method.definedInType) ")
+            //    ? "Self"
+            //    : method.returnType
+            //let parameters = method
+            //    .parameters
+            //    .map { return SwiftMethod.Parameter(label: $0.label,
+            //                                        type: $0.type == method.definedInType ? "Self" : $0.type,
+            //                                        isInOut: $0.isInOut,
+            //                                        isEscaping: $0.isEscaping,
+            //                                        isOwned: $0.isOwned,
+            //                                        isSelf: $0.isSelf)}
             let returnType = method.returnType != "Self" ? method.returnType : method.definedInType
             let parameters = method.parameters.map { return SwiftMethod.Parameter(label: $0.label,
-                                                                                      type: $0.type == "Self" ?  method.definedInType : $0.type,
-                                                                                      isInOut: $0.isInOut,
-                                                                                      isEscaping: $0.isEscaping,
-                                                                                      isOwned: $0.isOwned,
-                                                                                      isSelf: $0.isSelf)}
-            
+                                                                                  type: $0.type == "Self" ?  method.definedInType : $0.type,
+                                                                                  isInOut: $0.isInOut,
+                                                                                  isEscaping: $0.isEscaping,
+                                                                                  isOwned: $0.isOwned,
+                                                                                  isSelf: $0.isSelf)}
+
             let signature = SwiftMethod.serialization(available: method.available,
                                                       attributes: method.attributes,
                                                       skipAttributes: true,
@@ -66,11 +71,13 @@ extension SwiftFeature {
                 name.append(parameter.label.capitalized)
             }
             name = name.components(separatedBy: " ").joined(separator: "_").snakeToCamelCased()
-            if method.isOperator && (parameters.filter { $0.type == "Self" || $0.type == method.definedInType }).count != parameters.count {
+            if method.isOperator &&
+                (parameters.filter { $0.type == "Self" || $0.type == method.definedInType }).count != parameters.count {
                 if (parameters.filter { $0.type == parameters.first!.type }).count == parameters.count {
                     names[signature] = method.featureName(prefix: parameters.first?.type.removingSuffix("?"))
                 } else {
-                    names[signature] = method.featureName(prefix: parameters.first?.type.removingSuffix("?"), suffix: parameters.last?.type.removingSuffix("?"))
+                    names[signature] = method.featureName(prefix: parameters.first?.type.removingSuffix("?"),
+                                                          suffix: parameters.last?.type.removingSuffix("?"))
                 }
             } else {
                 names[signature] = method.featureName()
@@ -88,9 +95,9 @@ extension SwiftFeature {
         for signature in duplicates {
             guard let methods = crossReference[signature] else { continue }
             var protocols = [SwiftProtocol]()
-            for p in publicProtocols {
-                if (p.methods.map { $0.serialize }).contains(signature) {
-                    protocols.append(p)
+            for aProtocol in publicProtocols {
+                if (aProtocol.methods.map { $0.serialize }).contains(signature) {
+                    protocols.append(aProtocol)
                 }
             }
 
@@ -99,9 +106,9 @@ extension SwiftFeature {
             let protocolNames = protocols
                 .map { $0.globalName }
                 .sorted()
-            
+
             let valueTypes = sourceryTypes.structs + sourceryTypes.enums
-            
+
             var types = methods.map { $0.definedInType }
             for protocolName in protocolNames {
                 for type in valueTypes {

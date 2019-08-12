@@ -1,12 +1,12 @@
 import Swift
 
 extension String {
-    public func removingSuffix(_ suffix: String) -> String{
+    public func removingSuffix(_ suffix: String) -> String {
         guard hasSuffix(suffix) else { return self }
         return String(dropLast(suffix.count))
     }
 
-    public func removingPrefix(_ prefix: String) -> String{
+    public func removingPrefix(_ prefix: String) -> String {
         guard hasPrefix(prefix) else { return self }
         return String(dropFirst(prefix.count))
     }

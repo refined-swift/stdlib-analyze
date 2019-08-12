@@ -48,7 +48,8 @@ let propertiesFeatures = features
     .filter { $0.matchingProtocols.count == 0 }
     .filter { $0.returnType != "Self" }
     .filter { $0.types.count > 1 }
-    .filter { $0.protocols.count != 1 } // FIXME: this way you avoid dealing with most extensions with generic where clauses...
+    .filter { $0.protocols.count != 1 } // FIXME: this way you avoid dealing with
+                                        //        most extensions with generic where clauses...
     .filter { !$0.featureName.hasPrefix("_") }
     .filter { feature in sourceryTypes.all.contains { $0.name == feature.returnType } }
 

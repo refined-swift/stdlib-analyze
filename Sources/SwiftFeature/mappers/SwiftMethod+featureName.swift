@@ -12,6 +12,7 @@ extension SwiftMethod {
         return name.removingCharacters(from: CharacterSet.alphanumerics.inverted).uppercasingFirstLetter()
     }
 
+    // swiftlint:disable:next function_body_length
     private func operatorFeatureName(prefix: String? = nil, suffix: String? = nil) -> String {
         if let operatorName = String.operatorName(callName) {
             let name = (prefix ?? "") + operatorName
@@ -37,7 +38,7 @@ extension SwiftMethod {
                 .components(separatedBy: "_")
                 .joined(separator: "") + (suffix ?? "")
             return "\(name)OperatorCompatible"
-        } else if let characterName = callName.asciiNonControlCharacterName(){
+        } else if let characterName = callName.asciiNonControlCharacterName() {
             let name = (prefix ?? "") + characterName
                 .components(separatedBy: " ")
                 .map { $0.uppercasingFirstLetter() }

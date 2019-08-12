@@ -4,8 +4,14 @@ import SwiftTypes
 
 extension SwiftMethod.Parameter {
     public init(_ parameter: SourceryRuntime.MethodParameter) {
-        let simplifiedType = parameter.typeName.name.replacingOccurrences(of: ",", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: "->", with: "")
-
+        let simplifiedType = parameter
+            .typeName
+            .name
+            .replacingOccurrences(of: ",", with: "")
+            .replacingOccurrences(of: ")", with: "")
+            .replacingOccurrences(of: "(", with: "")
+            .replacingOccurrences(of: "->", with: "")
+        
         let isInOut = parameter.typeAttributes["inout"] != nil
         let isEscaping = parameter.typeAttributes["escaping"] != nil
         let isOwned = parameter.typeAttributes["__owned"] != nil

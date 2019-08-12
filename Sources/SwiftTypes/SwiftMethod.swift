@@ -17,7 +17,7 @@ public struct SwiftMethod: Codable, Equatable {
         public let isEscaping: Bool
         public let isOwned: Bool
         public let isSelf: Bool
-        
+  
         public init(label: String,
                     type: String,
                     isInOut: Bool,
@@ -32,7 +32,7 @@ public struct SwiftMethod: Codable, Equatable {
             self.isSelf = isSelf
         }
     }
-    
+
     public var serialize: String {
         let isDefinedInProtocol = self.isDefinedInProtocol ?? false
         return SwiftMethod.serialization(available: available,
@@ -54,7 +54,7 @@ public struct SwiftMethod: Codable, Equatable {
     public var isPublic: Bool {
         return accessLevel == "public"
     }
-    
+
     public var isMutating: Bool {
         return attributes.contains { $0.isMutating }
     }
@@ -62,15 +62,15 @@ public struct SwiftMethod: Codable, Equatable {
     public var isUnavailable: Bool {
         return attributes.contains { $0.isUnavailable }
     }
-    
+
     public var isDeprecated: Bool {
         return attributes.contains { $0.isDeprecated }
     }
-    
+
     public var isRenamed: Bool {
         return attributes.contains { $0.isRenamed }
     }
-    
+
     public var isObsoleted: Bool {
         return attributes.contains { $0.isObsoleted }
     }
@@ -96,7 +96,7 @@ public struct SwiftMethod: Codable, Equatable {
     public let returnType: String
     public let actualReturnType: String
     public let isDefinedInProtocol: Bool?
-    
+
     public var available: String {
         for attribute in attributes {
             let available = attribute.serializeAvailablePlatforms()
@@ -104,7 +104,7 @@ public struct SwiftMethod: Codable, Equatable {
         }
         return ""
     }
-    
+
     public init(definedInType: String,
                 attributes: [SwiftAttribute],
                 callName: String,
@@ -142,7 +142,7 @@ public struct SwiftMethod: Codable, Equatable {
         self.actualReturnType = actualReturnType
         self.isDefinedInProtocol = isDefinedInProtocol
     }
-    
+
     public static func serialization(available: String,
                                      attributes: [SwiftAttribute],
                                      skipAttributes: Bool,

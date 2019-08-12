@@ -4,7 +4,7 @@ public struct SwiftProperty: Codable, Equatable {
     public var serialize: String {
         let isDefinedInProtocol = self.isDefinedInProtocol ?? false
         return SwiftProperty.serialization(available: available,
-                                           attributes:attributes,
+                                           attributes: attributes,
                                            skipAttributes: false,
                                            accessLevel: accessLevel,
                                            writeAccessLevel: writeAccessLevel,
@@ -29,23 +29,23 @@ public struct SwiftProperty: Codable, Equatable {
     public var isPublic: Bool {
         return accessLevel == "public"
     }
-    
+
     public var isUnavailable: Bool {
         return attributes.contains { $0.isUnavailable }
     }
-    
+
     public var isDeprecated: Bool {
         return attributes.contains { $0.isDeprecated }
     }
-    
+
     public var isRenamed: Bool {
         return attributes.contains { $0.isRenamed }
     }
-    
+
     public var isObsoleted: Bool {
         return attributes.contains { $0.isObsoleted }
     }
-    
+
     public var available: String {
         for attribute in attributes {
             let available = attribute.serializeAvailablePlatforms()
@@ -53,7 +53,7 @@ public struct SwiftProperty: Codable, Equatable {
         }
         return ""
     }
-    
+
     public init(attributes: [SwiftAttribute],
                 isMutating: Bool,
                 isStatic: Bool,
@@ -73,7 +73,7 @@ public struct SwiftProperty: Codable, Equatable {
         self.returnType = returnType
         self.isDefinedInProtocol = isDefinedInProtocol
     }
-    
+
     public static func serialization(available: String,
                                      attributes: [SwiftAttribute],
                                      skipAttributes: Bool,

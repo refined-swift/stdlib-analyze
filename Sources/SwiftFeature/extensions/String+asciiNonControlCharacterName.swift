@@ -6,6 +6,7 @@ extension String {
         return String.asciiNonControlCharacterName(Character(self))
     }
 
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     static func asciiNonControlCharacterName(_ character: Character) -> String? {
         switch character {
         case " ": return "space"

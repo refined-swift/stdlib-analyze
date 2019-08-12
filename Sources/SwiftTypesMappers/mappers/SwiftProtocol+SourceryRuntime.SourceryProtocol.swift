@@ -7,7 +7,7 @@ extension SwiftProtocol {
         let attributes = type.attributes.compactMap { SwiftAttribute($0.1) }
         assert(Array(type.based.keys) == Array(type.based.values))
         // FIXME: associated values in methods, properties and subscripts will not have type, but should have typeName
-        
+
         self = SwiftProtocol(globalName: type.name,
                              inheritedProtocols: Array(type.based.keys),
                              properties: type.variables.map { SwiftProperty($0, typeName: type.name) },

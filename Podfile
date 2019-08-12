@@ -12,4 +12,6 @@ target 'analyze' do
   pod 'SwiftTypes', :path => '.'
   pod 'SwiftTypesMappers', :path => '.'
   pod 'SwiftFeature', :path => '.'
+  # swiftlint
+  pod 'SwiftLint'
 end

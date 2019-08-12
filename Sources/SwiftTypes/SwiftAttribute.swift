@@ -15,12 +15,12 @@ public struct SwiftAttribute: Codable, Equatable {
     public let isFinal: Bool
     public let isAlwaysEmitIntoClient: Bool
     public let isObjC: Bool
-    
+
     public let availableWatchVersion: String?
     public let availableMacVersion: String?
     public let availableTvVersion: String?
     public let availableIVersion: String?
-    
+
     public init(serialize: String,
                 isMutating: Bool,
                 isAccessLevel: Bool,
@@ -56,7 +56,7 @@ public struct SwiftAttribute: Codable, Equatable {
         self.availableTvVersion = availableTvVersion
         self.availableIVersion = availableIVersion
     }
-    
+
     public func serializeAvailablePlatforms() -> String {
         var platforms = [String]()
         if let watchVersion = availableWatchVersion {

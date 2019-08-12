@@ -4,6 +4,7 @@ import SwiftTypes
 import SwiftTypesMappers
 
 extension SwiftFeature {
+    // swiftlint:disable:next function_body_length
     static func parseProperties(in sourceryTypes: SourceryRuntime.Types,
                                 minimumCardinality: Int,
                                 includeUnavailable: Bool,
@@ -24,12 +25,14 @@ extension SwiftFeature {
                 (!$0.isDeprecated || includeDeprecated) &&
                 (!$0.isRenamed || includeRenamed) &&
                 (!$0.isObsoleted || includeObsoleted) }
-        
+
         var allProperties = [String: SwiftProperty]()
         var names = [String: String]()
 
-        let crossReference = Dictionary(grouping: nonProtocolPublicProperties, by: { (property: SwiftProperty) -> String in
-            //let returnType = property.returnType == property.definedInType || property.returnType.hasPrefix("\(property.definedInType!) ") ? "Self" : property.returnType
+        let crossReference = Dictionary(grouping: nonProtocolPublicProperties,
+                                        by: { (property: SwiftProperty) -> String in
+            //let returnType = property.returnType == property.definedInType ||
+            //    property.returnType.hasPrefix("\(property.definedInType!) ") ? "Self" : property.returnType
             let returnType = property.returnType != "Self" ? property.returnType : property.definedInType
 
             let signature = SwiftProperty.serialization(available: property.available,
@@ -56,9 +59,9 @@ extension SwiftFeature {
         for signature in duplicates {
             guard let properties = crossReference[signature] else { continue }
             var protocols = [SwiftProtocol]()
-            for p in publicProtocols {
-                if (p.properties.map { $0.serialize }).contains(signature) {
-                    protocols.append(p)
+            for aProtocol in publicProtocols {
+                if (aProtocol.properties.map { $0.serialize }).contains(signature) {
+                    protocols.append(aProtocol)
                 }
             }
 
@@ -67,15 +70,16 @@ extension SwiftFeature {
             let protocolNames = protocols
                 .map { $0.globalName }
                 .sorted()
-            
+
             let valueTypes = sourceryTypes.structs + sourceryTypes.enums
-            
+
             var types = properties.map { $0.definedInType }
             for protocolName in protocolNames {
                 for type in valueTypes {
                     if type.implements.keys.contains(protocolName) {
                         if !types.contains(type.name) {
-                            guard (type.name != "Range" && type.name != "ClosedRange") || name != "Countable" else { // FIXME: support generic where clauses
+                            guard (type.name != "Range" && type.name != "ClosedRange") ||
+                                name != "Countable" else { // FIXME: support generic where clauses
                                 print("Skipping \(type.name) due to unsupported generic where clause...")
                                 continue
                             }
@@ -89,12 +93,12 @@ extension SwiftFeature {
             guard types.count > 0 else {
                 continue
             }
-            
+
             let matchingProtocols = protocols
                 .filter { 1 == ($0.methods.count + $0.properties.count + $0.subscriptCount) }
                 .map { $0.globalName }
                 .sorted()
-            
+
             features.append(SwiftFeature(featureType: .property,
                                          featureName: name,
                                          signature: signature,

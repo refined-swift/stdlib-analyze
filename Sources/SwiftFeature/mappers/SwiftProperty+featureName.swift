@@ -5,7 +5,10 @@ extension SwiftProperty {
     func featureName() -> String {
         let snake = name.camelToSnakeCased()
         if snake.hasPrefix("is_") {
-            let removingIsPrefix = Array(snake.components(separatedBy: "_").dropFirst()).joined(separator: "_").snakeToCamelCased()
+            let removingIsPrefix = Array(snake.components(separatedBy: "_")
+                .dropFirst())
+                .joined(separator: "_")
+                .snakeToCamelCased()
             return "Maybe\(removingIsPrefix.uppercasingFirstLetter())"
         } else if name.hasSuffix("ed") {
             return "\(name.uppercasingFirstLetter().removingSuffix("d"))able"

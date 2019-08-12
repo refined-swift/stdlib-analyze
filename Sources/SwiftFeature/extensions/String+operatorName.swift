@@ -1,6 +1,7 @@
 import Swift
 
 extension String {
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     static func operatorName(_ operator: String) -> String? {
         switch `operator` {
         case "+": return "Addition"

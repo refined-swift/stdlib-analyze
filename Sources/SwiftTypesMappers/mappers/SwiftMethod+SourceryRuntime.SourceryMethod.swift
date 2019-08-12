@@ -8,17 +8,25 @@ extension SwiftMethod {
         if string.hasPrefix("where") {
             string = "Void \(string)"
         }
-        string = string.components(separatedBy: " ").map { $0.trimmingCharacters(in: .newlines) }.filter { !$0.isEmpty }.joined(separator: " ")
+        string = string.components(separatedBy: " ")
+            .map { $0.trimmingCharacters(in: .newlines) }
+            .filter { !$0.isEmpty }
+            .joined(separator: " ")
         return string
     }
 
     public init(_ method: SourceryRuntime.SourceryMethod, typeName: String) {
         let returnType = SwiftMethod.buildReturnType(method.returnTypeName)
-        let simplifiedType = returnType.replacingOccurrences(of: ",", with: "").replacingOccurrences(of: ")", with: "").replacingOccurrences(of: "(", with: "").replacingOccurrences(of: "->", with: "")
+        let simplifiedType = returnType
+            .replacingOccurrences(of: ",", with: "")
+            .replacingOccurrences(of: ")", with: "")
+            .replacingOccurrences(of: "(", with: "")
+            .replacingOccurrences(of: "->", with: "")
         let actualReturnType = SwiftMethod.buildReturnType(method.actualReturnTypeName)
 
         let isStatic = method.isStatic
-        let isOperator = method.callName.rangeOfCharacter(from: .symbols) != nil || method.callName.uppercasingFirstLetter().isEmpty
+        let isOperator = method.callName.rangeOfCharacter(from: .symbols) != nil ||
+            method.callName.uppercasingFirstLetter().isEmpty
         let isInit = method.isInitializer || method.isFailableInitializer
         let returnsVoid = simplifiedType == "Void" || simplifiedType.hasPrefix("Void ") || (simplifiedType.isEmpty && !isInit) || returnType == "()"
         let returnsSelf = simplifiedType == "Self" || simplifiedType.hasPrefix("Self ") || simplifiedType.hasSuffix(" Self")

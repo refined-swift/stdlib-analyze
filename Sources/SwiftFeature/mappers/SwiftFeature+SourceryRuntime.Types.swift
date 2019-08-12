@@ -5,14 +5,14 @@ import SwiftTypesMappers
 
 extension SwiftFeature {
     public static func parse(sourceryTypes: SourceryRuntime.Types,
-                      minimumCardinality: Int,
-                      includeProperties: Bool = true,
-                      includeMethods: Bool = true,
-                      includeSubscripts: Bool = true,
-                      includeUnavailable: Bool = false,
-                      includeDeprecated: Bool = false,
-                      includeRenamed: Bool = false,
-                      includeObsoleted: Bool = false) -> [SwiftFeature] {
+                             minimumCardinality: Int,
+                             includeProperties: Bool = true,
+                             includeMethods: Bool = true,
+                             includeSubscripts: Bool = true,
+                             includeUnavailable: Bool = false,
+                             includeDeprecated: Bool = false,
+                             includeRenamed: Bool = false,
+                             includeObsoleted: Bool = false) -> [SwiftFeature] {
         var features = [SwiftFeature]()
         if includeProperties {
             features += parseProperties(in: sourceryTypes,

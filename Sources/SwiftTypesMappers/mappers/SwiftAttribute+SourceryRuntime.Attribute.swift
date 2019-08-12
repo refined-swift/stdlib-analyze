@@ -3,6 +3,7 @@ import SourceryRuntime
 import SwiftTypes
 
 extension SwiftAttribute {
+    // swiftlint:disable:next function_body_length
     public init?(_ attribute: SourceryRuntime.Attribute) {
         guard AccessLevel(rawValue: attribute.description) == nil else { return nil }
         let isMutating = attribute.description == "mutating"
@@ -17,12 +18,12 @@ extension SwiftAttribute {
         let isFinal = attribute.description == "final"
         let isAlwaysEmitIntoClient = attribute.description == "@alwaysEmitIntoClient"
         let isObjC = attribute.description.hasPrefix("@objc(")
-        
-        var watchVersion: String? = nil
-        var macVersion: String? = nil
-        var tvVersion: String? = nil
-        var iVersion: String? = nil
-        
+
+        var watchVersion: String?
+        var macVersion: String?
+        var tvVersion: String?
+        var iVersion: String?
+
         if isAvailability && !isDeprecated && !isUnavailable && !isRenamed && !isObsoleted {
             for key in attribute.arguments.keys {
                 if key.hasPrefix("watchOS_") {
@@ -36,7 +37,7 @@ extension SwiftAttribute {
                 }
             }
         }
-        
+
         self = SwiftAttribute(serialize: attribute.description,
                               isMutating: isMutating,
                               isAccessLevel: isAccessLevel,
