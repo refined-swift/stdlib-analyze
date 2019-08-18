@@ -31,4 +31,3 @@ Upon completion:
 ## License
 
 `analyze` is released under the MIT license. See LICENSE file for details.
-
