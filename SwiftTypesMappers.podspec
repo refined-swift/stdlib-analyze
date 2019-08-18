@@ -9,8 +9,9 @@ Pod::Spec.new do |s|
     s.osx.deployment_target = '10.14'
     s.source           = { :git => 'https://github.com/refined-swift/stdlib-analyze' }
     s.source_files     = ['Sources/SwiftTypesMappers/**/*']
-    s.dependency 'SwiftTypes'
     s.dependency 'SourceryRuntime'
+    s.dependency 'SwiftTypes'
+    s.dependency 'Idioms'
     s.test_spec 'Tests' do |test_spec|
       test_spec.source_files = 'Tests/SwiftTypesMappersTests/**/*'
     end

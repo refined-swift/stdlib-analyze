@@ -1,5 +1,5 @@
 PODS:
-  - Idioms (1.4.0)
+  - Idioms (1.5.0)
   - ShellInterface (0.3.0)
   - SourcererArchiver (0.1.0):
     - Idioms
@@ -9,20 +9,32 @@ PODS:
   - Sourcery (0.16.2)
   - SourceryRuntime (0.0.1)
   - SwiftFeature (0.1.0):
+    - SourceryRuntime
     - SwiftTypes
     - SwiftTypesMappers
   - SwiftFeature/Tests (0.1.0):
+    - SourceryRuntime
     - SwiftTypes
     - SwiftTypesMappers
   - SwiftLint (0.34.0)
   - SwiftTypes (0.1.0)
   - SwiftTypes/Tests (0.1.0)
   - SwiftTypesMappers (0.1.0):
+    - Idioms
     - SourceryRuntime
     - SwiftTypes
   - SwiftTypesMappers/Tests (0.1.0):
+    - Idioms
     - SourceryRuntime
     - SwiftTypes
+  - SwiftWrappable (0.1.0):
+    - SourceryRuntime
+    - SwiftTypes
+    - SwiftTypesMappers
+  - SwiftWrappable/Tests (0.1.0):
+    - SourceryRuntime
+    - SwiftTypes
+    - SwiftTypesMappers
 
 DEPENDENCIES:
   - SourcererArchiver (from `https://github.com/hectr/swift-sourcerer.git`)
@@ -36,6 +48,8 @@ DEPENDENCIES:
   - SwiftTypes/Tests (from `.`)
   - SwiftTypesMappers (from `.`)
   - SwiftTypesMappers/Tests (from `.`)
+  - SwiftWrappable (from `.`)
+  - SwiftWrappable/Tests (from `.`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
@@ -57,6 +71,8 @@ EXTERNAL SOURCES:
     :path: "."
   SwiftTypesMappers:
     :path: "."
+  SwiftWrappable:
+    :path: "."
 
 CHECKOUT OPTIONS:
   SourcererArchiver:
@@ -70,17 +86,18 @@ CHECKOUT OPTIONS:
     :git: https://github.com/hectr/swift-sourcerer.git
 
 SPEC CHECKSUMS:
-  Idioms: 4cc4b8b6366bf783dd1f52ae7f4d8a82732230c9
+  Idioms: 1130a2ad5ff050c5dcaad6a749b3b282abb0378d
   ShellInterface: 84aad41857229d6730bb868f2e2d2764bdf1a09a
   SourcererArchiver: baa91f0b321ccddee255ea3668b7b2464ab644ac
   SourcererUnarchiver: 2cba00e491cb055e26df0fb698fa6987562fa25c
   Sourcery: 3f406d227efd179773b3c3599ebd1700d1a6013c
   SourceryRuntime: ad8d38480ae6d106369beed550e5b620c0fb4d52
-  SwiftFeature: 92d224ef07672ffd55cd168c55f863f3cdf7d94c
+  SwiftFeature: 0ac22c29e0530934a870eb89247c055e8e2b28ac
   SwiftLint: 79d48a17c6565dc286c37efb8322c7b450f95c67
   SwiftTypes: e5e585b6d998b1bad7aa85ed11dc27d1cf77b43d
-  SwiftTypesMappers: b5b161d92bd7b257116ddfaa12d65dda79e5efb3
+  SwiftTypesMappers: a53593f8e482cf01f0fbb5ec628d56c5920923b9
+  SwiftWrappable: 654ee3a7f2add56d0bf01f3fbac662652f66f86d
 
-PODFILE CHECKSUM: 2448ed59659c753a1f7e4c3a52ac9f9612de79a6
+PODFILE CHECKSUM: a3d6913ea434742efaff18f9ee1a36307c81ec44
 
 COCOAPODS: 1.7.4

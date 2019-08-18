@@ -3,14 +3,19 @@ import Swift
 public struct SwiftMethod: Codable, Equatable {
     public struct Parameter: Codable, Equatable {
         public var serialize: String {
-            var string = label
+            var string = externalLabel
+            if externalLabel != internalName {
+                string += " "
+                string += internalName
+            }
             string += ":"
             string += " "
             string += type
             return string
         }
 
-        public let label: String
+        public let externalLabel: String
+        public let internalName: String
         public let type: String
 
         public let isInOut: Bool
@@ -19,12 +24,14 @@ public struct SwiftMethod: Codable, Equatable {
         public let isSelf: Bool
   
         public init(label: String,
+                    internalName: String,
                     type: String,
                     isInOut: Bool,
                     isEscaping: Bool,
                     isOwned: Bool,
                     isSelf: Bool) {
-            self.label = label
+            self.externalLabel = label
+            self.internalName = internalName
             self.type = type
             self.isInOut = isInOut
             self.isEscaping = isEscaping
@@ -80,6 +87,7 @@ public struct SwiftMethod: Codable, Equatable {
     public let attributes: [SwiftAttribute]
     public let callName: String
     public let shortName: String
+    public let genericParameters: [String]
     public let parameters: [Parameter]
     public let accessLevel: String
 
@@ -109,6 +117,7 @@ public struct SwiftMethod: Codable, Equatable {
                 attributes: [SwiftAttribute],
                 callName: String,
                 shortName: String,
+                genericParameters: [String],
                 parameters: [SwiftMethod.Parameter],
                 accessLevel: String,
                 isInit: Bool,
@@ -127,6 +136,7 @@ public struct SwiftMethod: Codable, Equatable {
         self.attributes = attributes
         self.callName = callName
         self.shortName = shortName
+        self.genericParameters = genericParameters
         self.parameters = parameters
         self.accessLevel = accessLevel
         self.isInit = isInit
@@ -167,7 +177,7 @@ public struct SwiftMethod: Codable, Equatable {
         }
         string += isDefinedInProtocol ? "" : accessLevel
         string += isDefinedInProtocol ? "" : " "
-        string += isStatic ? "static " : ""
+        string += isStatic && !isInit ? "static " : ""
         if isFailableInit {
             string += "init?"
         } else if isInit {
@@ -185,9 +195,11 @@ public struct SwiftMethod: Codable, Equatable {
         string += ")"
         string += " "
         string += (isThrowing ? "throws " : isRethrowing ? "rethrows " : "")
-        string += "->"
-        string += " "
-        string += returnType
+        if !isInit {
+            string += "->"
+            string += " "
+            string += returnType
+        }
         return string.trimmingCharacters(in: .whitespaces)
     }
 }

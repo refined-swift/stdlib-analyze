@@ -11,6 +11,7 @@ public struct SwiftProtocol: Codable, Equatable {
     public let isRenamed: Bool
     public let isObsoleted: Bool
     public let accessLevel: String
+    public let associatedTypes: [String]
 
     public var isPublic: Bool {
         return accessLevel == "public"
@@ -25,7 +26,8 @@ public struct SwiftProtocol: Codable, Equatable {
                 isDeprecated: Bool,
                 isRenamed: Bool,
                 isObsoleted: Bool,
-                accessLevel: String) {
+                accessLevel: String,
+                associatedTypes: [String]) {
         self.globalName = globalName
         self.inheritedProtocols = inheritedProtocols
         self.properties = properties
@@ -36,5 +38,6 @@ public struct SwiftProtocol: Codable, Equatable {
         self.isRenamed = isRenamed
         self.isObsoleted = isObsoleted
         self.accessLevel = accessLevel
+        self.associatedTypes = associatedTypes
     }
 }

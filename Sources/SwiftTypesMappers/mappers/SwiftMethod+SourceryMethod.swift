@@ -26,6 +26,7 @@ extension SwiftMethod {
 
         let isStatic = method.isStatic
         let isOperator = method.callName.rangeOfCharacter(from: .symbols) != nil ||
+            method.callName.uppercased() == method.callName.lowercased() ||
             method.callName.uppercasingFirstLetter().isEmpty
         let isInit = method.isInitializer || method.isFailableInitializer
         let returnsVoid = simplifiedType == "Void" || simplifiedType.hasPrefix("Void ") || (simplifiedType.isEmpty && !isInit) || returnType == "()"
@@ -40,6 +41,7 @@ extension SwiftMethod {
                            attributes: method.attributes.values.compactMap(SwiftAttribute.init),
                            callName: callName,
                            shortName: method.shortName.trimmingCharacters(in: .whitespaces),
+                           genericParameters: method.genericParameters,
                            parameters: method.parameters.map(SwiftMethod.Parameter.init),
                            accessLevel: method.accessLevel,
                            isInit: isInit,

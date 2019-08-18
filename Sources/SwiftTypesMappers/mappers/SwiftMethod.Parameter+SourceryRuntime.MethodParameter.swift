@@ -17,7 +17,8 @@ extension SwiftMethod.Parameter {
         let isOwned = parameter.typeAttributes["__owned"] != nil
         let isSelf = simplifiedType == "Self" || simplifiedType.hasPrefix("Self ") || simplifiedType.hasSuffix(" Self")
 
-        self = SwiftMethod.Parameter(label: parameter.name,
+        self = SwiftMethod.Parameter(label: parameter.argumentLabel ?? "_",
+                                     internalName: parameter.name,
                                      type: parameter.typeName.name,
                                      isInOut: isInOut,
                                      isEscaping: isEscaping,

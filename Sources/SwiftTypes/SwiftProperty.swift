@@ -94,6 +94,7 @@ public struct SwiftProperty: Codable, Equatable {
         }
         string += isDefinedInProtocol ? "" : accessLevel
         string += isDefinedInProtocol ? "" : " "
+        string += isStatic ? "static " : ""
         if isMutating && !writeAccessLevel.isEmpty && writeAccessLevel != accessLevel {
             string += writeAccessLevel
             string += "(set)"

@@ -11,7 +11,7 @@ extension SwiftFeature {
                              includeDeprecated: Bool,
                              includeRenamed: Bool,
                              includeObsoleted: Bool) -> [SwiftFeature] {
-        let publicProtocols = sourceryTypes.protocols.map { SwiftProtocol($0) }.filter { $0.isPublic }
+        let publicProtocols = sourceryTypes.protocols.map { SwiftProtocol($0, knownTypes: sourceryTypes.all.map { $0.name }) }.filter { $0.isPublic }
         let nonProtocolPublicMethods = sourceryTypes
             .all
             .filter { !($0 is SourceryProtocol) && $0.accessLevel == "public" }
@@ -43,7 +43,8 @@ extension SwiftFeature {
             //                                        isOwned: $0.isOwned,
             //                                        isSelf: $0.isSelf)}
             let returnType = method.returnType != "Self" ? method.returnType : method.definedInType
-            let parameters = method.parameters.map { return SwiftMethod.Parameter(label: $0.label,
+            let parameters = method.parameters.map { return SwiftMethod.Parameter(label: $0.externalLabel,
+                                                                                  internalName: $0.internalName,
                                                                                   type: $0.type == "Self" ?  method.definedInType : $0.type,
                                                                                   isInOut: $0.isInOut,
                                                                                   isEscaping: $0.isEscaping,
@@ -68,7 +69,11 @@ extension SwiftFeature {
             var name = method.callName.capitalized
             for parameter in parameters {
                 name.append("_")
-                name.append(parameter.label.capitalized)
+                if parameter.externalLabel != "_" {
+                    name.append(parameter.externalLabel.capitalized)
+                } else {
+                    name.append(parameter.internalName.capitalized)
+                }
             }
             name = name.components(separatedBy: " ").joined(separator: "_").snakeToCamelCased()
             if method.isOperator &&

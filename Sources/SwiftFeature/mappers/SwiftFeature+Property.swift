@@ -11,7 +11,7 @@ extension SwiftFeature {
                                 includeDeprecated: Bool,
                                 includeRenamed: Bool,
                                 includeObsoleted: Bool) -> [SwiftFeature] {
-        let publicProtocols = sourceryTypes.protocols.map { SwiftProtocol($0) }.filter { $0.isPublic }
+        let publicProtocols = sourceryTypes.protocols.map { SwiftProtocol($0, knownTypes: sourceryTypes.all.map { $0.name }) }.filter { $0.isPublic }
         let nonProtocolPublicProperties = sourceryTypes
             .all
             .filter { /* !($0 is SourceryProtocol) &&*/ $0.accessLevel == "public" }
