@@ -5,6 +5,7 @@ import SourcererUnarchiver
 import SwiftTypes
 import SwiftTypesMappers
 import SwiftFeature
+import SwiftWrappable
 
 typealias SourceryType = /*SourceryRuntime.*/Type
 
@@ -19,14 +20,16 @@ let sourceryTypes = try unarchive(typesArchivePath)
 
 //////////////////////////////////////////////////////////////////////////////////
 
+let jsonEncoder = JSONEncoder()
+
+//////////////////////////////////////////////////////////////////////////////////
+
 let features = SwiftFeature.parse(sourceryTypes: sourceryTypes,
                                   minimumCardinality: 1,
                                   includeMethods: false,
                                   includeSubscripts: false)
 
-let jsonEncoder = JSONEncoder()
-
-////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////
 
 let maybeOutput = URL(fileURLWithPath: CommandLine.arguments[1])
     .appendingPathComponent("Maybe.json")
@@ -49,11 +52,20 @@ let propertiesFeatures = features
     .filter { $0.returnType != "Self" }
     .filter { $0.types.count > 1 }
     .filter { $0.protocols.count != 1 } // FIXME: this way you avoid dealing with
-                                        //        most extensions with generic where clauses...
+                                        //        most extensions with generic where clauses,
+                                        //        which are not supported yet...
     .filter { !$0.featureName.hasPrefix("_") }
     .filter { feature in sourceryTypes.all.contains { $0.name == feature.returnType } }
 
 let propertiesData = try jsonEncoder.encode(propertiesFeatures)
 try propertiesData.write(to: propertiesOutput)
 
-////////////////////////////////////////////////////////////////////////////////.
+////////////////////////////////////////////////////////////////////////////////
+
+let wrappableOutput = URL(fileURLWithPath: CommandLine.arguments[1])
+    .appendingPathComponent("Wrappable.json")
+
+let wrappables = SwiftWrappable.parse(sourceryTypes: sourceryTypes)
+
+let wrappableData = try jsonEncoder.encode(wrappables)
+try wrappableData.write(to: wrappableOutput)
