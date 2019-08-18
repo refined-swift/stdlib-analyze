@@ -6,6 +6,7 @@ final class SwiftMethodTests: XCTestCase {
                              attributes: [],
                              callName: "callName",
                              shortName: "shortName",
+                             genericParameters: [],
                              parameters: [],
                              accessLevel: "public",
                              isInit: false,
@@ -20,11 +21,37 @@ final class SwiftMethodTests: XCTestCase {
                              returnType: "Void",
                              actualReturnType: "Void",
                              isDefinedInProtocol: false)
+    
     func testSerialize() {
         XCTAssertEqual(method.serialize, "public static func shortName() throws -> Void")
     }
     
+    let initializer = SwiftMethod(definedInType: "Type",
+                             attributes: [],
+                             callName: "",
+                             shortName: "",
+                             genericParameters: [],
+                             parameters: [],
+                             accessLevel: "private",
+                             isInit: true,
+                             isFailableInit: true,
+                             isStatic: true,
+                             isOperator: false,
+                             returnsVoid: false,
+                             returnsSelf: false,
+                             hasWhere: false,
+                             isThrowing: true,
+                             isRethrowing: false,
+                             returnType: "",
+                             actualReturnType: "",
+                             isDefinedInProtocol: true)
+
+    func testSerializeInit() {
+        XCTAssertEqual(initializer.serialize, "init?() throws")
+    }
+
     static var allTests = [
         ("testSerialize", testSerialize),
+        ("testSerializeInit", testSerializeInit),
     ]
 }

@@ -11,7 +11,8 @@ final class SwiftProtocolTests: XCTestCase {
                                  isDeprecated: false,
                                  isRenamed: false,
                                  isObsoleted: false,
-                                 accessLevel: "public")
+                                 accessLevel: "public",
+                                 associatedTypes: [])
 
     func testIsPublic() {
         XCTAssertTrue(aProtocol.isPublic)
