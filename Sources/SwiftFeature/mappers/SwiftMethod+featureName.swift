@@ -14,7 +14,7 @@ extension SwiftMethod {
 
     // swiftlint:disable:next function_body_length
     private func operatorFeatureName(prefix: String? = nil, suffix: String? = nil) -> String {
-        if let operatorName = String.operatorName(callName) {
+        if let operatorName = String.operatorName(shortName) {
             let name = (prefix ?? "") + operatorName
                 .components(separatedBy: " ")
                 .map { $0.uppercasingFirstLetter() }
@@ -30,7 +30,7 @@ extension SwiftMethod {
             } else {
                 return "\(name)Compatible"
             }
-        } else if let unicodeName = callName.toUnicodeName() {
+        } else if let unicodeName = shortName.toUnicodeName() {
             let name = (prefix ?? "") + unicodeName
                 .components(separatedBy: " ")
                 .map { $0.uppercasingFirstLetter() }
@@ -38,7 +38,7 @@ extension SwiftMethod {
                 .components(separatedBy: "_")
                 .joined(separator: "") + (suffix ?? "")
             return "\(name)OperatorCompatible"
-        } else if let characterName = callName.asciiNonControlCharacterName() {
+        } else if let characterName = shortName.asciiNonControlCharacterName() {
             let name = (prefix ?? "") + characterName
                 .components(separatedBy: " ")
                 .map { $0.uppercasingFirstLetter() }
@@ -47,7 +47,7 @@ extension SwiftMethod {
                 .joined(separator: "") + (suffix ?? "")
             return "\(name)OperatorCompatible"
         } else {
-            let mutableString = NSMutableString(string: callName)
+            let mutableString = NSMutableString(string: shortName)
             CFStringTransform(mutableString, nil, kCFStringTransformToLatin, false)
             CFStringTransform(mutableString, nil, kCFStringTransformStripCombiningMarks, false)
             var components = [String]()
