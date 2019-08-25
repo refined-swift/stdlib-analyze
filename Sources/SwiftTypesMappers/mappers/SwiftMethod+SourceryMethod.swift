@@ -32,17 +32,17 @@ extension SwiftMethod {
         let returnsVoid = simplifiedType == "Void" || simplifiedType.hasPrefix("Void ") || (simplifiedType.isEmpty && !isInit) || returnType == "()"
         let returnsSelf = simplifiedType == "Self" || simplifiedType.hasPrefix("Self ") || simplifiedType.hasSuffix(" Self")
         let hasWhere = returnType.contains(" where ")
-
+        let shortName = method.shortName.trimmingCharacters(in: .whitespaces)
         var callName = method.callName.trimmingCharacters(in: .whitespaces)
         if let nonEmptyName = method.shortName.components(separatedBy: " ").first, callName.isEmpty {
             callName = nonEmptyName
         }
         self = SwiftMethod(definedInType: method.definedInType?.name ?? typeName,
                            attributes: method.attributes.values.compactMap(SwiftAttribute.init),
-                           callName: callName,
-                           shortName: method.shortName.trimmingCharacters(in: .whitespaces),
+                           callName: isOperator ? shortName : callName,
+                           shortName: shortName,
                            genericParameters: method.genericParameters,
-                           parameters: method.parameters.map(SwiftMethod.Parameter.init),
+                           parameters: method.parameters.map { SwiftMethod.Parameter($0, method: method) },
                            accessLevel: method.accessLevel,
                            isInit: isInit,
                            isFailableInit: method.isFailableInitializer,
