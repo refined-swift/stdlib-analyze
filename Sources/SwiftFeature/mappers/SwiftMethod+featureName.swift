@@ -21,6 +21,9 @@ extension SwiftMethod {
                 .joined(separator: "")
                 .components(separatedBy: "_")
                 .joined(separator: "") + (suffix ?? "")
+            #if false
+            // This code is not used in favour of the simpler
+            // implementation from above...
             if name.hasSuffix("on") {
                 return "\(name)able"
             } else if name.hasSuffix("ed") {
@@ -30,6 +33,9 @@ extension SwiftMethod {
             } else {
                 return "\(name)Compatible"
             }
+            #else
+                return "\(name)Compatible"
+            #endif
         } else if let unicodeName = shortName.toUnicodeName() {
             let name = (prefix ?? "") + unicodeName
                 .components(separatedBy: " ")
