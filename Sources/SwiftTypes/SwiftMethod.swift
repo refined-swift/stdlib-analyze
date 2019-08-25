@@ -16,6 +16,7 @@ public struct SwiftMethod: Codable, Equatable {
 
         public let externalLabel: String
         public let internalName: String
+        public let position: Int
         public let type: String
 
         public let isInOut: Bool
@@ -25,6 +26,7 @@ public struct SwiftMethod: Codable, Equatable {
   
         public init(label: String,
                     internalName: String,
+                    position: Int,
                     type: String,
                     isInOut: Bool,
                     isEscaping: Bool,
@@ -32,6 +34,7 @@ public struct SwiftMethod: Codable, Equatable {
                     isSelf: Bool) {
             self.externalLabel = label
             self.internalName = internalName
+            self.position = position
             self.type = type
             self.isInOut = isInOut
             self.isEscaping = isEscaping

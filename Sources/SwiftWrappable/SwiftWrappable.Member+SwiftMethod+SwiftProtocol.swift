@@ -9,6 +9,7 @@ extension SwiftWrappable.Member {
         for parameter in method.parameters {
             parameters.append(SwiftMethod.Parameter(label: parameter.externalLabel,
                                                     internalName: parameter.internalName,
+                                                    position: parameter.position,
                                                     type: normalizeReturnType(parameter.type, associatedTypes: `protocol`.associatedTypes),
                                                     isInOut: parameter.isInOut,
                                                     isEscaping: parameter.isEscaping,
