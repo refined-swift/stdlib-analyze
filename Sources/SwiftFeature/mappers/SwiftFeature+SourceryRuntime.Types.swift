@@ -7,7 +7,7 @@ extension SwiftFeature {
     public static func parse(sourceryTypes: SourceryRuntime.Types,
                              minimumCardinality: Int,
                              includeProperties: Bool = true,
-                             includeMethods: Bool = true,
+                             includeOperators: Bool = true,
                              includeSubscripts: Bool = true,
                              includeUnavailable: Bool = false,
                              includeDeprecated: Bool = false,
@@ -22,13 +22,13 @@ extension SwiftFeature {
                                         includeRenamed: includeRenamed,
                                         includeObsoleted: includeObsoleted)
         }
-        if includeMethods {
-            features += parseMethods(in: sourceryTypes,
-                                     minimumCardinality: minimumCardinality,
-                                     includeUnavailable: includeUnavailable,
-                                     includeDeprecated: includeDeprecated,
-                                     includeRenamed: includeRenamed,
-                                     includeObsoleted: includeObsoleted)
+        if includeOperators {
+            features += parseOperators(in: sourceryTypes,
+                                       minimumCardinality: minimumCardinality,
+                                       includeUnavailable: includeUnavailable,
+                                       includeDeprecated: includeDeprecated,
+                                       includeRenamed: includeRenamed,
+                                       includeObsoleted: includeObsoleted)
         }
         if includeSubscripts {
             features += parseSubscripts(in: sourceryTypes,
