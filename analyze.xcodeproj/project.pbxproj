@@ -336,7 +336,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5730ADF111F8AE56F3F1708A /* Pods-analyze.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(TOOLCHAIN_DIR)/usr/lib/swift/macosx",
@@ -352,7 +351,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 1B7D272290A2FE2403C131BE /* Pods-analyze.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = NO;
 				CODE_SIGN_STYLE = Automatic;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(TOOLCHAIN_DIR)/usr/lib/swift/macosx",
