@@ -33,13 +33,17 @@ extension SwiftMethod {
         let returnsSelf = simplifiedType == "Self" || simplifiedType.hasPrefix("Self ") || simplifiedType.hasSuffix(" Self")
         let hasWhere = returnType.contains(" where ")
         let shortName = method.shortName.trimmingCharacters(in: .whitespaces)
-        var callName = method.callName.trimmingCharacters(in: .whitespaces)
-        if let nonEmptyName = method.shortName.components(separatedBy: " ").first, callName.isEmpty {
-            callName = nonEmptyName
-        }
+        let callName: String = {
+            guard !isOperator else { return shortName } // operators callName maybe wrong, but it's safe to use shortName
+            let candidate = method.callName.trimmingCharacters(in: .whitespaces)
+            if let nonEmptyName = method.shortName.components(separatedBy: " ").first, candidate.isEmpty {
+                return nonEmptyName
+            }
+            return candidate
+        }()
         self = SwiftMethod(definedInType: method.definedInType?.name ?? typeName,
                            attributes: method.attributes.values.compactMap(SwiftAttribute.init),
-                           callName: isOperator ? shortName : callName,
+                           callName: callName,
                            shortName: shortName,
                            genericParameters: method.genericParameters,
                            parameters: method.parameters.map { SwiftMethod.Parameter($0, method: method) },
