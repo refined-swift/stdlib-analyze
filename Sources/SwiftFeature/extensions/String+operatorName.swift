@@ -1,11 +1,18 @@
 import Swift
 
+enum OperatorType {
+    case infix
+    case prefix
+    case postfix
+    case ternary
+}
+
 extension String {
     // swiftlint:disable:next function_body_length cyclomatic_complexity
-    static func operatorName(_ operator: String) -> String? {
+    static func operatorName(_ operator: String, type: OperatorType?) -> String? {
         switch `operator` {
         case "+": return "Addition"
-        case "-": return "Subtraction"
+        case "-": return type == .prefix ? "Minus" : "Subtraction"
         case "*": return "Multiplication"
         case "/": return "Division"
         case "%": return "Modulo"

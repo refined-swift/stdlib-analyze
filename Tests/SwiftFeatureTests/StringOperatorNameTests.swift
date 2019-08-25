@@ -3,10 +3,15 @@ import XCTest
 
 final class StringOperatorNameTests: XCTestCase {
     func testOperatorName() {
-        XCTAssertEqual(String.operatorName("=="), "Equal to")
+        XCTAssertEqual(String.operatorName("==", type: nil), "Equal")
+    }
+    
+    func testPrefixOperatorName() {
+        XCTAssertEqual(String.operatorName("-", type: .prefix), "Minus")
     }
     
     static var allTests = [
         ("testOperatorName", testOperatorName),
+        ("testPrefixOperatorName", testPrefixOperatorName),
     ]
 }

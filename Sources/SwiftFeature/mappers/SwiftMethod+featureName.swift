@@ -14,7 +14,7 @@ extension SwiftMethod {
 
     // swiftlint:disable:next function_body_length
     private func operatorFeatureName(prefix: String? = nil, suffix: String? = nil) -> String {
-        if let operatorName = String.operatorName(shortName) {
+        if let operatorName = String.operatorName(shortName, type: parameters.count == 1 ? .prefix : .infix) {
             let name = (prefix ?? "") + operatorName
                 .components(separatedBy: " ")
                 .map { $0.uppercasingFirstLetter() }

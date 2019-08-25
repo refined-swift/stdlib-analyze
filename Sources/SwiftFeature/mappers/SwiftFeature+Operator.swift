@@ -90,7 +90,6 @@ extension SwiftFeature {
                                                       isRethrowing: method.isRethrowing,
                                                       returnType: returnTypeForOperatorInProtocol(method),
                                                       isDefinedInProtocol: true)
-            
             var name = method.callName.capitalized
             for parameter in parameters {
                 name.append("_")
