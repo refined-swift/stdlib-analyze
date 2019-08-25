@@ -2,6 +2,7 @@ import Swift
 
 public struct SwiftFeature: Codable, Equatable {
     public enum FeatureType: String, Codable, Equatable {
+        case `operator`
         case method
         case property
         case `subscript`
