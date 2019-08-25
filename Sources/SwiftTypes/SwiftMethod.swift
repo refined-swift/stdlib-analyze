@@ -44,7 +44,6 @@ public struct SwiftMethod: Codable, Equatable {
     }
 
     public var serialize: String {
-        let isDefinedInProtocol = self.isDefinedInProtocol ?? false
         return SwiftMethod.serialization(available: available,
                                          attributes: attributes,
                                          skipAttributes: false,
@@ -106,7 +105,7 @@ public struct SwiftMethod: Codable, Equatable {
 
     public let returnType: String
     public let actualReturnType: String
-    public let isDefinedInProtocol: Bool?
+    public let isDefinedInProtocol: Bool
 
     public var available: String {
         for attribute in attributes {
