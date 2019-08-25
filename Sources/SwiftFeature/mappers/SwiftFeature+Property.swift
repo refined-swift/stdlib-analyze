@@ -89,7 +89,7 @@ extension SwiftFeature {
                 }
             }
             types.sort()
-            types = types.filter { !$0.hasPrefix("_") }
+            types = types.filter { !$0.hasPrefix("_") && !$0.hasSuffix("_") }
             guard types.count > 0 else {
                 continue
             }

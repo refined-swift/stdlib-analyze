@@ -4,6 +4,70 @@ import SourceryRuntime
 import SwiftTypes
 import SwiftTypesMappers
 
+// FIXME: @hectr duplicated code --------------
+private func isOptionalSyntacticSugarType(_ typeName: String) -> Bool {
+    return typeName.hasSuffix("?")
+}
+
+private func isDictionarySyntacticSugarType(_ typeName: String) -> Bool {
+    return typeName.hasPrefix("[") &&
+        typeName.hasSuffix("]") &&
+        typeName.contains(":")
+}
+
+private func isArraySyntacticSugarType(_ typeName: String) -> Bool {
+    return typeName.hasPrefix("[") &&
+        typeName.hasSuffix("]") &&
+        !typeName.contains(":")
+}
+
+private func normalizeReturnType(_ original: String, associatedTypes: [String], associatedTypesParent: String = "WrappedValue") -> String {
+    // This method will fail to normalize types with parametrized generic parameters (e.g. A<B<C>>)
+    let candidates = original
+        .components(separatedBy: CharacterSet(charactersIn: "<,>"))
+        .compactMap { $0.isEmpty ? nil : $0 }
+        .reduce(into: [String]()) { result, step in
+            if isOptionalSyntacticSugarType(step) {
+                result.append("Optional")
+                result.append(step.removingSuffix("?"))
+            } else if isDictionarySyntacticSugarType(step) {
+                result.append("Dictionary")
+                let types = step
+                    .removingPrefix("[")
+                    .removingSuffix("]")
+                    .components(separatedBy: ":")
+                for type in types {
+                    result.append(type.trimmingCharacters(in: .whitespaces))
+                }
+            } else if isArraySyntacticSugarType(step) {
+                result.append("Array")
+                result.append(step.removingPrefix("[").removingSuffix("]"))
+            } else {
+                result.append(step)
+            }
+        }.map { wellKnownTypealiases[$0] ?? $0 }
+    var returnType = ""
+    for candidate in candidates {
+        if let genericPartameterClosingRange = original.range(of: ">"),
+            let candidateRange = original.range(of: candidate),
+            genericPartameterClosingRange.lowerBound < candidateRange.lowerBound {
+            returnType += ">"
+        } else {
+            returnType += returnType.isEmpty ? "" : returnType.contains("<") ? ", " : "<"
+        }
+        if candidate != "Self" && associatedTypes.contains(candidate) {
+            returnType += "\(associatedTypesParent).\(candidate)"
+        } else {
+            returnType += candidate
+        }
+    }
+    if returnType.contains("<") && !returnType.contains(">") {
+        returnType += ">"
+    }
+    return returnType
+}
+// ----------------------------------------------------------
+
 private func returnTypeForOperatorInProtocol(_ method: SwiftMethod) -> String {
     guard method.definedInType != "Bool" else { return "Bool" }
     return method.returnType == method.definedInType || method.returnType.hasPrefix("\(method.definedInType) ")
@@ -24,10 +88,11 @@ private func parameterTypeForMethodAsDeclaredInProtocol(_ param: SwiftMethod.Par
     let type = param
         .type
         .removingPrefix("inout ")
-    let generics = type
+    let normalized = normalizeReturnType(type, associatedTypes: [])
+    let generics = normalized
         .components(separatedBy: "<").dropFirst().joined(separator: "<")
         .components(separatedBy: ">").dropLast().joined(separator: ">")
-    let typeWithoutGenericParameters = type
+    let typeWithoutGenericParameters = normalized
         .replacingOccurrences(of: "<\(generics)>", with: "")
     let definedInTypeWithoutParent = method.definedInType
         .components(separatedBy: ".").last
@@ -56,6 +121,9 @@ extension SwiftFeature {
                 !$0.isMutating &&
                 $0.isOperator &&
                 $0.returnType != "Void" &&
+                !$0.definedInType.hasPrefix("_") &&
+                !$0.definedInType.hasSuffix("_") &&
+                $0.parameters.map { $0.type }.filter { $0.hasPrefix("_") || $0.hasSuffix("_") }.count == 0 &&
                 (!$0.isUnavailable || includeUnavailable) &&
                 (!$0.isDeprecated || includeDeprecated) &&
                 (!$0.isRenamed || includeRenamed) &&
@@ -111,7 +179,7 @@ extension SwiftFeature {
             } else {
                 names[signature] = method.featureName()
             }
-            allMethods[signature] = method
+            allMethods[signature] = method.updatingParameters(to: parameters)
             
             return signature
         })
@@ -155,6 +223,13 @@ extension SwiftFeature {
                 .filter { 1 == ($0.methods.count + $0.properties.count + $0.subscriptCount) }
                 .map { $0.globalName }
                 .sorted()
+            
+            let allParameterTypesAreSelf = method.parameters.filter { $0.type != "Self" }.count == 0
+            guard allParameterTypesAreSelf else {
+                // TODO: support operators with non-Self parameters
+                print("Skipping unsupported operator: \(signature)")
+                continue
+            }
             
             features.append(SwiftFeature(featureType: method.isOperator ? .operator : .method,
                                          featureName: name,

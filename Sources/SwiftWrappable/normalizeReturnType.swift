@@ -19,7 +19,8 @@ public func isArraySyntacticSugarType(_ typeName: String) -> Bool {
         !typeName.contains(":")
 }
 
-public func normalizeReturnType(_ original: String, associatedTypes: [String]) -> String {
+public func normalizeReturnType(_ original: String, associatedTypes: [String], associatedTypesParent: String = "WrappedValue") -> String {
+    // This method will fail to normalize types with parametrized generic parameters (e.g. A<B<C>>)
     let candidates = original
         .components(separatedBy: CharacterSet(charactersIn: "<,>"))
         .compactMap { $0.isEmpty ? nil : $0 }
@@ -45,14 +46,20 @@ public func normalizeReturnType(_ original: String, associatedTypes: [String]) -
         }.map { wellKnownTypealiases[$0] ?? $0 }
     var returnType = ""
     for candidate in candidates {
-        returnType += returnType.isEmpty ? "" : returnType.contains("<") ? ", " : "<"
+        if let genericPartameterClosingRange = original.range(of: ">"),
+            let candidateRange = original.range(of: candidate),
+            genericPartameterClosingRange.lowerBound < candidateRange.lowerBound {
+            returnType += ">"
+        } else {
+            returnType += returnType.isEmpty ? "" : returnType.contains("<") ? ", " : "<"
+        }
         if candidate != "Self" && associatedTypes.contains(candidate) {
-            returnType += "WrappedValue.\(candidate)"
+            returnType += "\(associatedTypesParent).\(candidate)"
         } else {
             returnType += candidate
         }
     }
-    if returnType.contains("<") {
+    if returnType.contains("<") && !returnType.contains(">") {
         returnType += ">"
     }
     return returnType

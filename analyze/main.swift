@@ -21,6 +21,7 @@ let sourceryTypes = try unarchive(typesArchivePath)
 //////////////////////////////////////////////////////////////////////////////////
 
 let jsonEncoder = JSONEncoder()
+jsonEncoder.outputFormatting = .sortedKeys
 
 //////////////////////////////////////////////////////////////////////////////////
 
@@ -71,7 +72,9 @@ let operatorsFeatures = features
     .filter { $0.matchingProtocols.count == 0 }
 
 let operatorsData = try jsonEncoder.encode(operatorsFeatures)
-try operatorsData.write(to: operatorsOutput)
+let operatorsString = (String(data: operatorsData, encoding: .utf8) ?? "")
+    .replacingOccurrences(of: "\\/", with: "/") // FIXME: this unescapes '/'
+try (operatorsString.data(using: .utf8) ?? Data()).write(to: operatorsOutput)
 
 ////////////////////////////////////////////////////////////////////////////////
 
