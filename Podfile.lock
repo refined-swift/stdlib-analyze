@@ -1,5 +1,5 @@
 PODS:
-  - Idioms (1.5.0)
+  - Idioms (1.6.0)
   - ShellInterface (0.3.0)
   - SourcererArchiver (0.1.0):
     - Idioms
@@ -76,22 +76,22 @@ EXTERNAL SOURCES:
 
 CHECKOUT OPTIONS:
   SourcererArchiver:
-    :commit: c25bf8971178ce0df1b27df4a33e823d7c3d2054
+    :commit: f4eb1f1dcf38ab8b038e9d5b8978ea4dbdc2b2e3
     :git: https://github.com/hectr/swift-sourcerer.git
   SourcererUnarchiver:
-    :commit: c25bf8971178ce0df1b27df4a33e823d7c3d2054
+    :commit: f4eb1f1dcf38ab8b038e9d5b8978ea4dbdc2b2e3
     :git: https://github.com/hectr/swift-sourcerer.git
   SourceryRuntime:
-    :commit: c25bf8971178ce0df1b27df4a33e823d7c3d2054
+    :commit: f4eb1f1dcf38ab8b038e9d5b8978ea4dbdc2b2e3
     :git: https://github.com/hectr/swift-sourcerer.git
 
 SPEC CHECKSUMS:
-  Idioms: 1130a2ad5ff050c5dcaad6a749b3b282abb0378d
+  Idioms: 0cbd92bf614775c0e992b4ca3053f5b000686fe1
   ShellInterface: 84aad41857229d6730bb868f2e2d2764bdf1a09a
-  SourcererArchiver: baa91f0b321ccddee255ea3668b7b2464ab644ac
-  SourcererUnarchiver: 2cba00e491cb055e26df0fb698fa6987562fa25c
+  SourcererArchiver: 643b9662eeed2c5bd85e18b54b59d572b591bff0
+  SourcererUnarchiver: 2ee23e529a16b9dd69ee49eeed41cc9a367074e5
   Sourcery: 3f406d227efd179773b3c3599ebd1700d1a6013c
-  SourceryRuntime: ad8d38480ae6d106369beed550e5b620c0fb4d52
+  SourceryRuntime: f4cc0fe7357eecee1147bb7f1d5328114d03ea68
   SwiftFeature: 0ac22c29e0530934a870eb89247c055e8e2b28ac
   SwiftLint: 79d48a17c6565dc286c37efb8322c7b450f95c67
   SwiftTypes: e5e585b6d998b1bad7aa85ed11dc27d1cf77b43d

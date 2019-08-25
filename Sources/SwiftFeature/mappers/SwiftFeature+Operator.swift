@@ -1,4 +1,5 @@
 import Foundation
+import Idioms
 import SourceryRuntime
 import SwiftTypes
 import SwiftTypesMappers
