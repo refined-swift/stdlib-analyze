@@ -64,6 +64,7 @@ extension String {
         case ".&": return "Pointwise bitwise AND"
         case "&<<": return "Overflow left shift"
         case "&>>": return "Overflow right shift"
+        case "~=": return "Pattern match"
         default: return nil
         }
     }
