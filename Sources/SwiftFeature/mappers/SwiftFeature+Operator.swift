@@ -204,7 +204,8 @@ extension SwiftFeature {
                 .map { $0.globalName }
                 .sorted()
             
-            let valueTypes = sourceryTypes.structs + sourceryTypes.enums
+            let valueTypes = (sourceryTypes.structs + sourceryTypes.enums)
+                .filter { $0.accessLevel == "public" }
             
             var types = methods.map { $0.definedInType }
             for protocolName in protocolNames {
