@@ -180,6 +180,9 @@ public struct SwiftMethod: Codable, Equatable {
         string += isDefinedInProtocol ? "" : accessLevel
         string += isDefinedInProtocol ? "" : " "
         string += isStatic && !isInit ? "static " : ""
+        if isOperator && parameters.count == 1 {
+            string += "prefix "
+        }
         if isFailableInit {
             string += "init?"
         } else if isInit {
