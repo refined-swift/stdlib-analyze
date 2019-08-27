@@ -212,6 +212,7 @@ extension SwiftFeature {
                 for type in valueTypes {
                     if type.implements.keys.contains(protocolName) {
                         if !types.contains(type.name) {
+                            guard type.name != "Never" else { continue } // FIXME: solve Never issue
                             types.append(type.name)
                         }
                     }
