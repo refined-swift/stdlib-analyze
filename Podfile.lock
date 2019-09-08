@@ -6,7 +6,7 @@ PODS:
     - ShellInterface
   - SourcererUnarchiver (0.1.0):
     - SourceryRuntime
-  - Sourcery (0.16.2)
+  - Sourcery (0.17.0)
   - SourceryRuntime (0.0.1)
   - SwiftFeature (0.1.0):
     - SourceryRuntime
@@ -16,7 +16,7 @@ PODS:
     - SourceryRuntime
     - SwiftTypes
     - SwiftTypesMappers
-  - SwiftLint (0.34.0)
+  - SwiftLint (0.35.0)
   - SwiftTypes (0.1.0)
   - SwiftTypes/Tests (0.1.0)
   - SwiftTypesMappers (0.1.0):
@@ -90,10 +90,10 @@ SPEC CHECKSUMS:
   ShellInterface: 84aad41857229d6730bb868f2e2d2764bdf1a09a
   SourcererArchiver: 643b9662eeed2c5bd85e18b54b59d572b591bff0
   SourcererUnarchiver: 2ee23e529a16b9dd69ee49eeed41cc9a367074e5
-  Sourcery: 3f406d227efd179773b3c3599ebd1700d1a6013c
+  Sourcery: 3ed61be7c8a1218fce349266139379dba477efe0
   SourceryRuntime: f4cc0fe7357eecee1147bb7f1d5328114d03ea68
   SwiftFeature: 0ac22c29e0530934a870eb89247c055e8e2b28ac
-  SwiftLint: 79d48a17c6565dc286c37efb8322c7b450f95c67
+  SwiftLint: 5553187048b900c91aa03552807681bb6b027846
   SwiftTypes: e5e585b6d998b1bad7aa85ed11dc27d1cf77b43d
   SwiftTypesMappers: a53593f8e482cf01f0fbb5ec628d56c5920923b9
   SwiftWrappable: 654ee3a7f2add56d0bf01f3fbac662652f66f86d
