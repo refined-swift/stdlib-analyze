@@ -18,9 +18,9 @@ extension SwiftMethod {
             let name = (prefix ?? "") + operatorName
                 .components(separatedBy: " ")
                 .map { $0.uppercasingFirstLetter() }
-                .joined(separator: "")
+                .joined()
                 .components(separatedBy: "_")
-                .joined(separator: "") + (suffix ?? "")
+                .joined() + (suffix ?? "")
             #if false
             // This code is not used in favour of the simpler
             // implementation from above...
@@ -40,17 +40,17 @@ extension SwiftMethod {
             let name = (prefix ?? "") + unicodeName
                 .components(separatedBy: " ")
                 .map { $0.uppercasingFirstLetter() }
-                .joined(separator: "")
+                .joined()
                 .components(separatedBy: "_")
-                .joined(separator: "") + (suffix ?? "")
+                .joined() + (suffix ?? "")
             return "\(name)OperatorCompatible"
         } else if let characterName = shortName.asciiNonControlCharacterName() {
             let name = (prefix ?? "") + characterName
                 .components(separatedBy: " ")
                 .map { $0.uppercasingFirstLetter() }
-                .joined(separator: "")
+                .joined()
                 .components(separatedBy: "_")
-                .joined(separator: "") + (suffix ?? "")
+                .joined() + (suffix ?? "")
             return "\(name)OperatorCompatible"
         } else {
             let mutableString = NSMutableString(string: shortName)
@@ -65,7 +65,7 @@ extension SwiftMethod {
                 .joined(separator: " ")
                 .components(separatedBy: " ")
                 .map { $0.uppercasingFirstLetter() }
-                .joined(separator: "") + (suffix ?? "")
+                .joined() + (suffix ?? "")
             return "\(name)OperatorCompatible"
         }
     }
@@ -77,18 +77,18 @@ extension SwiftMethod {
         //        .label
         //        .components(separatedBy: " ")
         //        .map { $0.uppercasingFirstLetter() }
-        //        .joined(separator: "")
+        //        .joined()
         //        .components(separatedBy: "_")
-        //        .joined(separator: "")
+        //        .joined()
         //    let type = parameter
         //        .type
         //        .components(separatedBy: "<")
         //        .first!
         //        .components(separatedBy: " ")
         //        .map { $0.uppercasingFirstLetter() }
-        //        .joined(separator: "")
+        //        .joined()
         //        .components(separatedBy: "_")
-        //        .joined(separator: "")
+        //        .joined()
         //    name.append(label)
         //    //if !name.contains(type) {
         //    //    name.append(type)
@@ -99,9 +99,10 @@ extension SwiftMethod {
         } else {
             let returnType = self.returnType
                 .components(separatedBy: "<")
-                .first!
+                .first?
                 .removingSuffix("?")
                 .removingSuffix("?")
+                ?? self.returnType // fallback won't be necessary if first was not optional
             if name.contains(returnType) {
                 return "\(isStatic ? "Static" : "")\(prefix ?? "")\(name)\(suffix ?? "")"
             } else {

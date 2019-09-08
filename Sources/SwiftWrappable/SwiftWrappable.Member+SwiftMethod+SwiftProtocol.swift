@@ -39,7 +39,8 @@ extension SwiftWrappable.Member {
                                      signature: signature,
                                      callName: method.callName,
                                      parameters: method.parameters.map {
-                                        SwiftWrappable.Parameter(externalLabel: $0.externalLabel, internalName: $0.internalName) },
+                                        return SwiftWrappable.Parameter(externalLabel: $0.externalLabel, internalName: $0.internalName)
+                                     },
                                      isThrowing: method.isThrowing)
     }
 }

@@ -4,7 +4,7 @@ import SwiftTypes
 import SwiftTypesMappers
 
 extension SwiftFeature {
-    // swiftlint:disable:next function_body_length
+    // swiftlint:disable:next function_body_length cyclomatic_complexity
     static func parseProperties(in sourceryTypes: SourceryRuntime.Types,
                                 minimumCardinality: Int,
                                 includeUnavailable: Bool,
@@ -24,17 +24,17 @@ extension SwiftFeature {
                 (!$0.isUnavailable || includeUnavailable) &&
                 (!$0.isDeprecated || includeDeprecated) &&
                 (!$0.isRenamed || includeRenamed) &&
-                (!$0.isObsoleted || includeObsoleted) }
-
+                (!$0.isObsoleted || includeObsoleted)
+            }
+        
         var allProperties = [String: SwiftProperty]()
         var names = [String: String]()
-
-        let crossReference = Dictionary(grouping: nonProtocolPublicProperties,
-                                        by: { (property: SwiftProperty) -> String in
+        
+        let crossReference = Dictionary(grouping: nonProtocolPublicProperties) { (property: SwiftProperty) -> String in
             //let returnType = property.returnType == property.definedInType ||
             //    property.returnType.hasPrefix("\(property.definedInType!) ") ? "Self" : property.returnType
             let returnType = property.returnType != "Self" ? property.returnType : property.definedInType
-
+            
             let signature = SwiftProperty.serialization(available: property.available,
                                                         attributes: property.attributes,
                                                         skipAttributes: true,
@@ -47,14 +47,14 @@ extension SwiftFeature {
                                                         isDefinedInProtocol: true)
             names[signature] = property.featureName()
             allProperties[signature] = property
-
+            
             return signature
-        })
-
+        }
+        
         let duplicates: [String] = crossReference
             .filter { $1.count >= minimumCardinality }
             .compactMap { $0.0 }
-
+        
         var features = [SwiftFeature]()
         for signature in duplicates {
             guard let properties = crossReference[signature] else { continue }
@@ -64,15 +64,15 @@ extension SwiftFeature {
                     protocols.append(aProtocol)
                 }
             }
-
-            let property = allProperties[signature]!
-            let name = names[signature]!
+            
+            guard let property = allProperties[signature] else { fatalError("allProperties keys should contain: \(signature)") }
+            guard let name = names[signature] else { fatalError("names keys should contain: \(signature)") }
             let protocolNames = protocols
                 .map { $0.globalName }
                 .sorted()
-
+            
             let valueTypes = sourceryTypes.structs + sourceryTypes.enums
-
+            
             var types = properties.map { $0.definedInType }
             for protocolName in protocolNames {
                 for type in valueTypes {
@@ -80,8 +80,8 @@ extension SwiftFeature {
                         if !types.contains(type.name) {
                             guard (type.name != "Range" && type.name != "ClosedRange") ||
                                 name != "Countable" else { // FIXME: support generic where clauses
-                                print("Skipping \(type.name) due to unsupported generic where clause...")
-                                continue
+                                    print("Skipping \(type.name) due to unsupported generic where clause...")
+                                    continue
                             }
                             types.append(type.name)
                         }
@@ -90,15 +90,13 @@ extension SwiftFeature {
             }
             types.sort()
             types = types.filter { !$0.hasPrefix("_") && !$0.hasSuffix("_") }
-            guard types.count > 0 else {
-                continue
-            }
-
+            guard !types.isEmpty else { continue }
+            
             let matchingProtocols = protocols
                 .filter { 1 == ($0.methods.count + $0.properties.count + $0.subscriptCount) }
                 .map { $0.globalName }
                 .sorted()
-
+            
             features.append(SwiftFeature(featureType: .property,
                                          featureName: name,
                                          signature: signature,
@@ -109,8 +107,7 @@ extension SwiftFeature {
                                          protocols: protocolNames,
                                          matchingProtocols: matchingProtocols))
         }
-
+        
         return features.sorted { $0.featureName > $1.featureName }
-
     }
 }

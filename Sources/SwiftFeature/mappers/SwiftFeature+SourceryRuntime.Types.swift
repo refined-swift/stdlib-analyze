@@ -4,6 +4,7 @@ import SwiftTypes
 import SwiftTypesMappers
 
 extension SwiftFeature {
+    /// Extracts features from the given SourceryRuntime types.
     public static func parse(sourceryTypes: SourceryRuntime.Types,
                              minimumCardinality: Int,
                              includeProperties: Bool = true,

@@ -2,7 +2,6 @@ import Swift
 
 public struct SwiftProperty: Codable, Equatable {
     public var serialize: String {
-        let isDefinedInProtocol = self.isDefinedInProtocol ?? false
         return SwiftProperty.serialization(available: available,
                                            attributes: attributes,
                                            skipAttributes: false,
@@ -24,7 +23,7 @@ public struct SwiftProperty: Codable, Equatable {
     public let writeAccessLevel: String
     public let name: String
     public let returnType: String
-    public let isDefinedInProtocol: Bool?
+    public let isDefinedInProtocol: Bool
 
     public var isPublic: Bool {
         return accessLevel == "public"

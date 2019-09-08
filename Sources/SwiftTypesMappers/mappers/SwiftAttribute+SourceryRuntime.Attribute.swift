@@ -4,7 +4,30 @@ import SourceryRuntime
 import SwiftTypes
 
 extension SwiftAttribute {
-    // swiftlint:disable:next function_body_length
+    private typealias AvailableVersion = (
+        watch: String?,
+        mac: String?,
+        tv: String?,
+        iOS: String?
+    )
+    
+    private static func availableVersions(_ attribute: SourceryRuntime.Attribute) -> AvailableVersion {
+        var version = AvailableVersion(watch: nil, mac: nil, tv: nil, iOS: nil)
+        for key in attribute.arguments.keys {
+            if key.hasPrefix("watchOS_") {
+                version.watch = key.removingPrefix("watchOS_")
+            } else if key.hasPrefix("macOS_") {
+                version.mac = key.removingPrefix("macOS_")
+            } else if key.hasPrefix("tvOS_") {
+                version.tv = key.removingPrefix("tvOS_")
+            } else if key.hasPrefix("iOS_") {
+                version.iOS = key.removingPrefix("iOS_")
+            }
+        }
+        return version
+    }
+
+    /// Maps given SourceryRuntime attribute into an attribute object.
     public init?(_ attribute: SourceryRuntime.Attribute) {
         guard AccessLevel(rawValue: attribute.description) == nil else { return nil }
         let isMutating = attribute.description == "mutating"
@@ -20,23 +43,12 @@ extension SwiftAttribute {
         let isAlwaysEmitIntoClient = attribute.description == "@alwaysEmitIntoClient"
         let isObjC = attribute.description.hasPrefix("@objc(")
 
-        var watchVersion: String?
-        var macVersion: String?
-        var tvVersion: String?
-        var iVersion: String?
+        let versions: AvailableVersion?
 
         if isAvailability && !isDeprecated && !isUnavailable && !isRenamed && !isObsoleted {
-            for key in attribute.arguments.keys {
-                if key.hasPrefix("watchOS_") {
-                    watchVersion = key.removingPrefix("watchOS_")
-                } else if key.hasPrefix("macOS_") {
-                    macVersion = key.removingPrefix("macOS_")
-                } else if key.hasPrefix("tvOS_") {
-                    tvVersion = key.removingPrefix("tvOS_")
-                } else if key.hasPrefix("iOS_") {
-                    iVersion = key.removingPrefix("iOS_")
-                }
-            }
+            versions = SwiftAttribute.availableVersions(attribute)
+        } else {
+            versions = nil
         }
 
         self = SwiftAttribute(serialize: attribute.description,
@@ -52,9 +64,9 @@ extension SwiftAttribute {
                               isFinal: isFinal,
                               isAlwaysEmitIntoClient: isAlwaysEmitIntoClient,
                               isObjC: isObjC,
-                              availableWatchVersion: watchVersion,
-                              availableMacVersion: macVersion,
-                              availableTvVersion: tvVersion,
-                              availableIVersion: iVersion)
+                              availableWatchVersion: versions?.watch,
+                              availableMacVersion: versions?.mac,
+                              availableTvVersion: versions?.tv,
+                              availableIVersion: versions?.iOS)
     }
 }

@@ -3,23 +3,28 @@ import Idioms
 import SwiftTypes
 import SwiftTypesMappers
 
+/// Returns whether a type name uses the `Optional` shorthand (?) or not.
 public func isOptionalSyntacticSugarType(_ typeName: String) -> Bool {
     return typeName.hasSuffix("?")
 }
 
+/// Returns whether a type name uses the `Dictionary` shorthand ([:]) or not.
 public func isDictionarySyntacticSugarType(_ typeName: String) -> Bool {
     return typeName.hasPrefix("[") &&
         typeName.hasSuffix("]") &&
         typeName.contains(":")
 }
 
+/// Returns whether a type name uses the `Array` shorthand ([]) or not.
 public func isArraySyntacticSugarType(_ typeName: String) -> Bool {
     return typeName.hasPrefix("[") &&
         typeName.hasSuffix("]") &&
         !typeName.contains(":")
 }
 
-public func normalizeReturnType(_ original: String, associatedTypes: [String], associatedTypesParent: String = "WrappedValue") -> String {
+/// Transforms the given type name from a return statement into a type that only uses explicit types (no shorthands).
+/// The normalized type will also prepend the specified parent type to any associated type that is used to parametrize the returned type.
+public func normalizeReturnType(_ original: String, associatedTypes: [String], associatedTypesParent: String? = "WrappedValue") -> String {
     // This method will fail to normalize types with parametrized generic parameters (e.g. A<B<C>>)
     let candidates = original
         .components(separatedBy: CharacterSet(charactersIn: "<,>"))
@@ -43,7 +48,8 @@ public func normalizeReturnType(_ original: String, associatedTypes: [String], a
             } else {
                 result.append(step)
             }
-        }.map { wellKnownTypealiases[$0] ?? $0 }
+        }
+        .map { wellKnownTypealiases[$0] ?? $0 }
     var returnType = ""
     for candidate in candidates {
         if let genericPartameterClosingRange = original.range(of: ">"),
@@ -53,7 +59,7 @@ public func normalizeReturnType(_ original: String, associatedTypes: [String], a
         } else {
             returnType += returnType.isEmpty ? "" : returnType.contains("<") ? ", " : "<"
         }
-        if candidate != "Self" && associatedTypes.contains(candidate) {
+        if let associatedTypesParent = associatedTypesParent, candidate != "Self", associatedTypes.contains(candidate) {
             returnType += "\(associatedTypesParent).\(candidate)"
         } else {
             returnType += candidate

@@ -3,6 +3,7 @@ import SourceryRuntime
 import SwiftTypes
 
 extension SwiftMethod.Parameter {
+    /// Maps given SourceryRuntime parameter (and the method it belongs to) into a parameter object.
     public init(_ parameter: SourceryRuntime.MethodParameter, method: SourceryRuntime.Method) {
         let simplifiedType = parameter
             .typeName

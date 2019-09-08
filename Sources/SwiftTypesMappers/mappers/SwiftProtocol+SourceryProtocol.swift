@@ -3,6 +3,8 @@ import SourceryRuntime
 import SwiftTypes
 
 extension SwiftProtocol {
+    /// Maps a SourceryRuntime protocol into a protocol object.
+    /// The `knownTypes` parameter is used to determine the protocol associated types.
     public init(_ type: SourceryRuntime.SourceryProtocol, knownTypes: [String]) {
         let attributes = type.attributes.compactMap { SwiftAttribute($0.1) }
         assert(Array(type.based.keys) == Array(type.based.values))

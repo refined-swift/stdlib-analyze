@@ -1,6 +1,7 @@
 import Swift
 
 extension SwiftMethod {
+    /// Returns a copy of the receiver updated with the given parameters array.
     public func updatingParameters(to parameters: [SwiftMethod.Parameter]) -> SwiftMethod {
         return SwiftMethod(definedInType: definedInType,
                            attributes: attributes,

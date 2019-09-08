@@ -45,7 +45,8 @@ private func normalizeReturnType(_ original: String, associatedTypes: [String], 
             } else {
                 result.append(step)
             }
-        }.map { wellKnownTypealiases[$0] ?? $0 }
+        }
+        .map { wellKnownTypealiases[$0] ?? $0 }
     var returnType = ""
     for candidate in candidates {
         if let genericPartameterClosingRange = original.range(of: ">"),
@@ -90,8 +91,12 @@ private func parameterTypeForMethodAsDeclaredInProtocol(_ param: SwiftMethod.Par
         .removingPrefix("inout ")
     let normalized = normalizeReturnType(type, associatedTypes: [])
     let generics = normalized
-        .components(separatedBy: "<").dropFirst().joined(separator: "<")
-        .components(separatedBy: ">").dropLast().joined(separator: ">")
+        .components(separatedBy: "<")
+        .dropFirst()
+        .joined(separator: "<")
+        .components(separatedBy: ">")
+        .dropLast()
+        .joined(separator: ">")
     let typeWithoutGenericParameters = normalized
         .replacingOccurrences(of: "<\(generics)>", with: "")
     let definedInTypeWithoutParent = method.definedInType
@@ -103,6 +108,16 @@ private func parameterTypeForMethodAsDeclaredInProtocol(_ param: SwiftMethod.Par
 }
 
 extension SwiftFeature {
+    private static func isFeatureCompatibleOperator(_ method: SwiftMethod) -> Bool {
+        return method.isPublic &&
+            !method.isMutating &&
+            method.isOperator &&
+            method.returnType != "Void" &&
+            !method.definedInType.hasPrefix("_") &&
+            !method.definedInType.hasSuffix("_") &&
+            method.parameters.map { $0.type }.contains { $0.hasPrefix("_") || $0.hasSuffix("_") }
+    }
+
     // swiftlint:disable:next function_body_length cyclomatic_complexity
     static func parseOperators(in sourceryTypes: SourceryRuntime.Types,
                                minimumCardinality: Int,
@@ -117,32 +132,29 @@ extension SwiftFeature {
             .flatMap { type in
                 return type.methods.map { SwiftMethod($0, typeName: type.name) }
             }
-            .filter { $0.isPublic &&
-                !$0.isMutating &&
-                $0.isOperator &&
-                $0.returnType != "Void" &&
-                !$0.definedInType.hasPrefix("_") &&
-                !$0.definedInType.hasSuffix("_") &&
-                $0.parameters.map { $0.type }.filter { $0.hasPrefix("_") || $0.hasSuffix("_") }.count == 0 &&
+            .filter { isFeatureCompatibleOperator($0) &&
                 (!$0.isUnavailable || includeUnavailable) &&
                 (!$0.isDeprecated || includeDeprecated) &&
                 (!$0.isRenamed || includeRenamed) &&
-                (!$0.isObsoleted || includeObsoleted) }
+                (!$0.isObsoleted || includeObsoleted)
+            }
         
         var allMethods = [String: SwiftMethod]()
         var names = [String: String]()
         
-        let crossReference = Dictionary(grouping: nonProtocolPublicMethods, by: { (method: SwiftMethod) -> String in
+        // swiftlint:disable:next closure_body_length
+        let crossReference = Dictionary(grouping: nonProtocolPublicMethods) { (method: SwiftMethod) -> String in
             let parameters = method
                 .parameters
-                .map { return SwiftMethod.Parameter(label: "_",
-                                                    internalName: parameterNameAtPosition($0.position),
-                                                    position: $0.position,
-                                                    type: parameterTypeForMethodAsDeclaredInProtocol($0, method: method),
-                                                    isInOut: $0.isInOut,
-                                                    isEscaping: $0.isEscaping,
-                                                    isOwned: $0.isOwned,
-                                                    isSelf: $0.isSelf)}
+                .map { SwiftMethod.Parameter(label: "_",
+                                             internalName: parameterNameAtPosition($0.position),
+                                             position: $0.position,
+                                             type: parameterTypeForMethodAsDeclaredInProtocol($0, method: method),
+                                             isInOut: $0.isInOut,
+                                             isEscaping: $0.isEscaping,
+                                             isOwned: $0.isOwned,
+                                             isSelf: $0.isSelf)
+                }
             
             let signature = SwiftMethod.serialization(available: method.available,
                                                       attributes: method.attributes,
@@ -170,7 +182,7 @@ extension SwiftFeature {
             name = name.components(separatedBy: " ").joined(separator: "_").snakeToCamelCased()
             if method.isOperator &&
                 (parameters.filter { $0.type == "Self" || $0.type == method.definedInType }).count != parameters.count {
-                if (parameters.filter { $0.type == parameters.first!.type }).count == parameters.count {
+                if (parameters.filter { $0.type == parameters.first?.type }).count == parameters.count {
                     names[signature] = method.featureName(prefix: parameters.first?.type.removingSuffix("?"))
                 } else {
                     names[signature] = method.featureName(prefix: parameters.first?.type.removingSuffix("?"),
@@ -182,7 +194,7 @@ extension SwiftFeature {
             allMethods[signature] = method.updatingParameters(to: parameters)
             
             return signature
-        })
+        }
         
         let duplicates: [String] = crossReference
             .filter { $1.count >= minimumCardinality }
@@ -198,8 +210,8 @@ extension SwiftFeature {
                 }
             }
             
-            let method = allMethods[signature]!
-            let name = names[signature]!
+            guard let method = allMethods[signature] else { fatalError("allMethods keys should contain: \(signature)") }
+            guard let name = names[signature] else { fatalError("names keys should contain: \(signature)") }
             let protocolNames = protocols
                 .map { $0.globalName }
                 .sorted()
@@ -226,7 +238,7 @@ extension SwiftFeature {
                 .map { $0.globalName }
                 .sorted()
             
-            let allParameterTypesAreSelf = method.parameters.filter { $0.type != "Self" }.count == 0
+            let allParameterTypesAreSelf = method.parameters.contains { $0.type != "Self" }
             guard allParameterTypesAreSelf else {
                 // TODO: support operators with non-Self parameters
                 print("Skipping unsupported operator: \(signature)")

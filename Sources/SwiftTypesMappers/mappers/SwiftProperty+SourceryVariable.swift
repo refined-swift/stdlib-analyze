@@ -3,6 +3,7 @@ import SourceryRuntime
 import SwiftTypes
 
 extension SwiftProperty {
+    /// Maps given SourceryRuntime variable (and the type it belongs to) into a property object.
     public init(_ variable: SourceryRuntime.Variable, typeName: String) {
         let attributes: [SourceryRuntime.Attribute] = Array(variable.attributes.values)
         

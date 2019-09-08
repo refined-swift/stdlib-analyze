@@ -4,6 +4,7 @@ import SwiftTypes
 import SwiftTypesMappers
 
 extension SwiftWrappable {
+    /// Extracts wrappables from given SourceryRuntime types.
     public static func parse(sourceryTypes: SourceryRuntime.Types) -> [SwiftWrappable] {
         let publicProtocols = sourceryTypes
             .protocols

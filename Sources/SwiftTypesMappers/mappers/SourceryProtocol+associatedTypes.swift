@@ -54,58 +54,61 @@ private func appendType(_ type: String,
             $0 != "Any" &&
             $0 != "AnyObject" &&
             !excludedTypes.contains($0) &&
-            !knownTypes.contains($0) }
+            !knownTypes.contains($0)
+        }
     candidates.forEach { set.insert($0) }
 }
 
 extension SourceryRuntime.SourceryProtocol {
+    /// Returns all associated types declared by the receiver protocol object.
+    /// `knownTypes` parameter is used to guess which types exist outside the protocol
+    /// and which ones have been declared inside it as associated types.
     public func associatedTypes(knownTypes: [String]) -> [String] {
         let type = self
         
         let associatedTypes = Set<String>()
             .union(type.allMethods.reduce(into: Set<String>()) { result, method in
-            
-            let methodGenericParameters = method.genericParameters
-            let paramaters: [MethodParameter] = method.parameters
-            let paramTypes: [String] = paramaters.compactMap { parameter in
-                guard parameter.type == nil else { return nil}
-                return parameter.typeName.name
-            }
-            if method.returnType == nil {
-                appendType(method.returnTypeName.name,
-                           to: &result,
-                           knownTypes: knownTypes,
-                           excludedTypes: methodGenericParameters)
-            }
-            appendTypes(paramTypes,
-                        to: &result,
-                        knownTypes: knownTypes,
-                        excludedTypes: methodGenericParameters)
-        })
+                let methodGenericParameters = method.genericParameters
+                let paramaters: [MethodParameter] = method.parameters
+                let paramTypes: [String] = paramaters.compactMap { parameter in
+                    guard parameter.type == nil else { return nil }
+                    return parameter.typeName.name
+                }
+                if method.returnType == nil {
+                    appendType(method.returnTypeName.name,
+                               to: &result,
+                               knownTypes: knownTypes,
+                               excludedTypes: methodGenericParameters)
+                }
+                appendTypes(paramTypes,
+                            to: &result,
+                            knownTypes: knownTypes,
+                            excludedTypes: methodGenericParameters)
+            })
             .union(type.allVariables.reduce(into: Set<String>()) { result, variable in
-            guard variable.type == nil else { return }
-            appendType(variable.typeName.name,
-                       to: &result,
-                       knownTypes: knownTypes,
-                       excludedTypes: [])
-        })
-            .union(type.allSubscripts.reduce(into: Set<String>()) { result, aSubscript in
-            let subscripts: [MethodParameter] = aSubscript.parameters
-            let paramTypes: [String] = subscripts.compactMap { parameter in
-                guard parameter.type == nil else { return nil}
-                return parameter.typeName.name
-            }
-            if aSubscript.returnType == nil {
-                appendType(aSubscript.returnTypeName.name,
+                guard variable.type == nil else { return }
+                appendType(variable.typeName.name,
                            to: &result,
                            knownTypes: knownTypes,
                            excludedTypes: [])
-            }
-            appendTypes(paramTypes,
-                        to: &result,
-                        knownTypes: knownTypes,
-                        excludedTypes: [])
-        })
+            })
+            .union(type.allSubscripts.reduce(into: Set<String>()) { result, aSubscript in
+                let subscripts: [MethodParameter] = aSubscript.parameters
+                let paramTypes: [String] = subscripts.compactMap { parameter in
+                    guard parameter.type == nil else { return nil }
+                    return parameter.typeName.name
+                }
+                if aSubscript.returnType == nil {
+                    appendType(aSubscript.returnTypeName.name,
+                               to: &result,
+                               knownTypes: knownTypes,
+                               excludedTypes: [])
+                }
+                appendTypes(paramTypes,
+                            to: &result,
+                            knownTypes: knownTypes,
+                            excludedTypes: [])
+            })
         
         return associatedTypes.sorted()
     }

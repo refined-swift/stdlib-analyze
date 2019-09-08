@@ -15,13 +15,18 @@ extension SwiftMethod {
         return string
     }
 
-    public init(_ method: SourceryRuntime.SourceryMethod, typeName: String) {
-        let returnType = SwiftMethod.buildReturnType(method.returnTypeName)
-        let simplifiedType = returnType
+    private static func simplifyReturnType(_ type: String) -> String {
+        return type
             .replacingOccurrences(of: ",", with: "")
             .replacingOccurrences(of: ")", with: "")
             .replacingOccurrences(of: "(", with: "")
             .replacingOccurrences(of: "->", with: "")
+    }
+    
+    /// Maps given SourceryRuntime method (and the typeName it belongs to) into a method object.
+    public init(_ method: SourceryRuntime.SourceryMethod, typeName: String) {
+        let returnType = SwiftMethod.buildReturnType(method.returnTypeName)
+        let simplifiedType = SwiftMethod.simplifyReturnType(returnType)
         let actualReturnType = SwiftMethod.buildReturnType(method.actualReturnTypeName)
 
         let isStatic = method.isStatic
