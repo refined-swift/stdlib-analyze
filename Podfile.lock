@@ -9,10 +9,12 @@ PODS:
   - Sourcery (0.17.0)
   - SourceryRuntime (0.0.1)
   - SwiftFeature (0.1.0):
+    - Idioms
     - SourceryRuntime
     - SwiftTypes
     - SwiftTypesMappers
   - SwiftFeature/Tests (0.1.0):
+    - Idioms
     - SourceryRuntime
     - SwiftTypes
     - SwiftTypesMappers
@@ -92,7 +94,7 @@ SPEC CHECKSUMS:
   SourcererUnarchiver: 2ee23e529a16b9dd69ee49eeed41cc9a367074e5
   Sourcery: 3ed61be7c8a1218fce349266139379dba477efe0
   SourceryRuntime: f4cc0fe7357eecee1147bb7f1d5328114d03ea68
-  SwiftFeature: 0ac22c29e0530934a870eb89247c055e8e2b28ac
+  SwiftFeature: 7869cd7361bbbcd7f1c84143cd86ddbecbde062a
   SwiftLint: 5553187048b900c91aa03552807681bb6b027846
   SwiftTypes: e5e585b6d998b1bad7aa85ed11dc27d1cf77b43d
   SwiftTypesMappers: a53593f8e482cf01f0fbb5ec628d56c5920923b9

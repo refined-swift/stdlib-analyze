@@ -1,7 +1,6 @@
 import Swift
 import Idioms
 import SwiftTypes
-import SwiftTypesMappers
 
 /// Returns whether a type name uses the `Optional` shorthand (?) or not.
 public func isOptionalSyntacticSugarType(_ typeName: String) -> Bool {
@@ -24,7 +23,7 @@ public func isArraySyntacticSugarType(_ typeName: String) -> Bool {
 
 /// Transforms the given type name from a return statement into a type that only uses explicit types (no shorthands).
 /// The normalized type will also prepend the specified parent type to any associated type that is used to parametrize the returned type.
-public func normalizeReturnType(_ original: String, associatedTypes: [String], associatedTypesParent: String? = "WrappedValue") -> String {
+public func normalizeReturnType(_ original: String, associatedTypes: [String], associatedTypesParent: String = "WrappedValue") -> String {
     // This method will fail to normalize types with parametrized generic parameters (e.g. A<B<C>>)
     let candidates = original
         .components(separatedBy: CharacterSet(charactersIn: "<,>"))
@@ -59,7 +58,7 @@ public func normalizeReturnType(_ original: String, associatedTypes: [String], a
         } else {
             returnType += returnType.isEmpty ? "" : returnType.contains("<") ? ", " : "<"
         }
-        if let associatedTypesParent = associatedTypesParent, candidate != "Self", associatedTypes.contains(candidate) {
+        if candidate != "Self" && associatedTypes.contains(candidate) {
             returnType += "\(associatedTypesParent).\(candidate)"
         } else {
             returnType += candidate
